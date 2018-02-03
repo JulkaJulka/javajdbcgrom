@@ -83,7 +83,7 @@ public class ProductDAO {
         }
     }
 
-    public Product deleteProduct(Long id) throws Exception {
+    public void deleteProduct(Long id) throws Exception {
         if(id <= 0)
             throw new Exception("Id " + id + " is wrong");
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
@@ -97,14 +97,12 @@ public class ProductDAO {
 
                 if (idDB == id) {
                     statement.executeUpdate("DELETE FROM PRODUCT WHERE ID = \'" + id + "\'");
-                    return new Product(idDB, name, description, price);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
     private Connection getConnection() throws SQLException {
