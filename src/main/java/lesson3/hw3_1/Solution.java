@@ -14,11 +14,23 @@ public class Solution {
     private static final String USER = "sysadmin";
     private static final String PASS = "sysadmin";
 
-public List<Product> findProductsByPrice(int price, int delta){
+    public void deleteProducts() throws SQLException {
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+            boolean res = statement.execute("DELETE FROM PRODUCT WHERE NAME != 'toy4' ");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong");
+
+        }
+    }
+
+public List<Product> findProductsByPrice(int price, int delta) throws Exception{
+    if(delta > price)
+        throw new Exception("You enter wrong data");
     List<Product> products = getProducts();
     List<Product> findProductsByPrice = new ArrayList<>();
     for (Product product: products){
-        if(product.getPrice() >= (price - delta) && product.getPrice() <= (price + delta)){
+        if( product.getPrice() >= (price - delta) && product.getPrice() <= (price + delta)){
             findProductsByPrice.add(product);
 
         }
@@ -29,29 +41,34 @@ public List<Product> findProductsByPrice(int price, int delta){
 public List<Product> findProductsByName(String word) throws Exception{
     validateWord(word);
     List<Product> products = getProducts();
-    List<Product> findProductsByPrice = new ArrayList<>();
+    List<Product> findProductsByName = new ArrayList<>();
     for (Product product: products){
-        if(product.getName().equals(word)){
-            findProductsByPrice.add(product);
+        if(product.getName() != null && product.getName().equals(word)){
+            findProductsByName.add(product);
 
         }
     }
-    return findProductsByPrice;
+    return findProductsByName;
 
 }
-public List<Product> findProductsWithEmptyDescription(){
+public List<Product> findProductsWithEmptyDescription() throws Exception{
     List<Product> products = getProducts();
+    if(products == null)
+        throw new Exception("DB doesn't have any data");
     List<Product> findProducts = new ArrayList<>();
     for (Product product : products){
-       try{ if(product.getDescription().isEmpty()){
+       try{
+           if(product.getDescription()!= null && product.getDescription().isEmpty()){
             findProducts.add(product);
-        }} catch (Exception e){
-            findProducts.add(product);
+        }
+       } catch (Exception e){
+            e.printStackTrace();
+           throw new Exception("Something went wrong");
        }
     }
     return findProducts;
 }
-    public List<Product> getProducts() {
+    public List<Product> getProducts() throws SQLException {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
 
@@ -65,10 +82,9 @@ public List<Product> findProductsWithEmptyDescription(){
             return products;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);

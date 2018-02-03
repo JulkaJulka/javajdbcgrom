@@ -12,7 +12,7 @@ public class Solution {
     private static final String USER = "sysadmin";
     private static final String PASS = "sysadmin";
 
-    public Long testSavePerformance() {
+    public Long testSavePerformance() throws SQLException{
         // time execute 246651ms;236434
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
@@ -31,11 +31,9 @@ public class Solution {
             return time;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
-
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
     public String randomString() {
@@ -55,7 +53,7 @@ public class Solution {
         return string;
     }
 
-    public Long testDeleteByIdPerformance() {
+    public Long testDeleteByIdPerformance() throws SQLException{
         //time execute 278102ms
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
@@ -74,13 +72,12 @@ public class Solution {
             return time;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
-    public Long testDeletePerformance() {
+    public Long testDeletePerformance() throws SQLException {
         //time execute 465ms
         try (Connection connection = getConnection()) {
             long start = System.currentTimeMillis();
@@ -95,13 +92,12 @@ public class Solution {
             return time;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
-    public Long testSelectByIdPerformance() {
+    public Long testSelectByIdPerformance() throws SQLException{
         //time execute 513516ms
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
@@ -120,14 +116,12 @@ public class Solution {
             return time;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
-
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
-    public Long testSelectPerformance() {
+    public Long testSelectPerformance() throws SQLException{
         //time execute 441ms
         try (Connection connection = getConnection()) {
             long start = System.currentTimeMillis();
@@ -141,12 +135,10 @@ public class Solution {
             return time;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
-
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);

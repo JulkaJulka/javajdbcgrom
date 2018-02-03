@@ -13,30 +13,38 @@ public class ProductDAO {
     private static final String USER = "sysadmin";
     private static final String PASS = "sysadmin";
 
-    public Product save(Product product) {
+    public Product save(Product product) throws Exception {
+        if(product == null)
+            throw new Exception("You enter wrong data");
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PRODUCT (ID, NAME, DESCRIPTION, PRICE) VALUES(?, ?, ?, ?)");
 
+            List<Product> productList = getProducts();
+            for (Product pr : productList) {
+                if (pr.getId() == product.getId())
+                    throw new Exception("Product with id " + product.getId() + " is already exist in DB");
+            }
             preparedStatement.setLong(1, product.getId());
             preparedStatement.setString(2, product.getName());
             preparedStatement.setString(3, product.getDescription());
             preparedStatement.setInt(4, product.getPrice());
 
-
             int res = preparedStatement.executeUpdate();
 
             System.out.println("save was finished with result " + res);
-            //return product;
+
+            return product;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return product;
     }
 
-    public Product update(Product product) {
+    public Product update(Product product) throws Exception {
+        if(product == null)
+            throw new Exception("You enter wrong data");
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
@@ -51,15 +59,14 @@ public class ProductDAO {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
         return null;
     }
 
-    public List<Product> getProducts() {
-        try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
+    public List<Product> getProducts() throws SQLException {
+        try (Connection connection = getConnection();Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
 
@@ -71,13 +78,14 @@ public class ProductDAO {
             return products;
 
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return null;
     }
 
-    public Product deleteProduct(Long id) {
+    public Product deleteProduct(Long id) throws Exception {
+        if(id <= 0)
+            throw new Exception("Id " + id + " is wrong");
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
@@ -87,16 +95,14 @@ public class ProductDAO {
                 String description = resultSet.getString(3);
                 int price = resultSet.getInt(4);
 
-                if (id > 0 && idDB == id) {
+                if (idDB == id) {
                     statement.executeUpdate("DELETE FROM PRODUCT WHERE ID = \'" + id + "\'");
                     return new Product(idDB, name, description, price);
                 }
             }
-
-
         } catch (SQLException e) {
-            System.err.println("Something went wrong");
             e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
         return null;
     }
