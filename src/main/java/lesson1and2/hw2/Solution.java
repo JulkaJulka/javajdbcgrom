@@ -1,6 +1,6 @@
 package lesson1and2.hw2;
 
-import lesson3.hw3_1.Product;
+
 
 import java.sql.*;
 import java.util.ArrayList;
