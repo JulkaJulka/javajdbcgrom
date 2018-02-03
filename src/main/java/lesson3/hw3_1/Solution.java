@@ -14,60 +14,52 @@ public class Solution {
     private static final String USER = "sysadmin";
     private static final String PASS = "sysadmin";
 
-    public void deleteProducts() throws SQLException {
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-            boolean res = statement.execute("DELETE FROM PRODUCT WHERE NAME != 'toy4' ");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Something went wrong");
+    public List<Product> findProductsByPrice(int price, int delta) throws Exception {
+        if (delta > price)
+            throw new Exception("You enter wrong data");
+        List<Product> products = getProducts();
+        List<Product> findProductsByPrice = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getPrice() >= (price - delta) && product.getPrice() <= (price + delta)) {
+                findProductsByPrice.add(product);
 
+            }
         }
+        return findProductsByPrice;
     }
 
-public List<Product> findProductsByPrice(int price, int delta) throws Exception{
-    if(delta > price)
-        throw new Exception("You enter wrong data");
-    List<Product> products = getProducts();
-    List<Product> findProductsByPrice = new ArrayList<>();
-    for (Product product: products){
-        if( product.getPrice() >= (price - delta) && product.getPrice() <= (price + delta)){
-            findProductsByPrice.add(product);
+    public List<Product> findProductsByName(String word) throws Exception {
+        validateWord(word);
+        List<Product> products = getProducts();
+        List<Product> findProductsByName = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getName() != null && product.getName().equals(word)) {
+                findProductsByName.add(product);
 
+            }
         }
+        return findProductsByName;
+
     }
-    return findProductsByPrice;
-}
 
-public List<Product> findProductsByName(String word) throws Exception{
-    validateWord(word);
-    List<Product> products = getProducts();
-    List<Product> findProductsByName = new ArrayList<>();
-    for (Product product: products){
-        if(product.getName() != null && product.getName().equals(word)){
-            findProductsByName.add(product);
-
+    public List<Product> findProductsWithEmptyDescription() throws Exception {
+        List<Product> products = getProducts();
+        if (products == null)
+            throw new Exception("DB doesn't have any data");
+        List<Product> findProducts = new ArrayList<>();
+        for (Product product : products) {
+            try {
+                if (product.getDescription() != null && product.getDescription().isEmpty()) {
+                    findProducts.add(product);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("Something went wrong");
+            }
         }
+        return findProducts;
     }
-    return findProductsByName;
 
-}
-public List<Product> findProductsWithEmptyDescription() throws Exception{
-    List<Product> products = getProducts();
-    if(products == null)
-        throw new Exception("DB doesn't have any data");
-    List<Product> findProducts = new ArrayList<>();
-    for (Product product : products){
-       try{
-           if(product.getDescription()!= null && product.getDescription().isEmpty()){
-            findProducts.add(product);
-        }
-       } catch (Exception e){
-            e.printStackTrace();
-           throw new Exception("Something went wrong");
-       }
-    }
-    return findProducts;
-}
     public List<Product> getProducts() throws SQLException {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
@@ -86,19 +78,20 @@ public List<Product> findProductsWithEmptyDescription() throws Exception{
             throw new SQLException("Something went wrong");
         }
     }
+
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    boolean validateWord(String body) throws Exception{
-        if(body.isEmpty() || body.length() < 3)
+    boolean validateWord(String body) throws Exception {
+        if (body.isEmpty() || body.length() < 3)
             throw new Exception("You enter wrong name " + body);
         String[] words = body.split(" ");
-        if(words.length != 1)
+        if (words.length != 1)
             throw new Exception("You enter wrong name " + body + "More than one word");
         char[] chars = body.toCharArray();
-        for (char ch : chars){
-            if(!(Character.isLetterOrDigit(ch)))
+        for (char ch : chars) {
+            if (!(Character.isLetterOrDigit(ch)))
                 throw new Exception("You enter wrong name " + body + " contains not only letters and digits");
         }
         return true;
