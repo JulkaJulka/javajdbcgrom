@@ -1,5 +1,7 @@
 package lesson3;
 
+import oracle.jdbc.proxy.annotation.Pre;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +16,12 @@ public class ProductDAO {
     private static final String PASS = "sysadmin";
 
     public Product save(Product product) throws Exception {
-        if(product == null)
+        if (product == null)
             throw new Exception("You enter wrong data");
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PRODUCT (ID, NAME, DESCRIPTION, PRICE) VALUES(?, ?, ?, ?)");
 
-            List<Product> productList = getProducts();
-            for (Product pr : productList) {
-                if (pr.getId() == product.getId())
-                    throw new Exception("Product with id " + product.getId() + " is already exist in DB");
-            }
             preparedStatement.setLong(1, product.getId());
             preparedStatement.setString(2, product.getName());
             preparedStatement.setString(3, product.getDescription());
@@ -43,20 +40,27 @@ public class ProductDAO {
     }
 
     public Product update(Product product) throws Exception {
-        if(product == null)
+        if (product == null)
             throw new Exception("You enter wrong data");
 
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
+        try (Connection connection = getConnection()) {
+            String sql = "UPDATE PRODUCT SET NAME = ?, DESCRIPTION = ?, PRICE = ?  WHERE ID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setInt(3, product.getPrice());
+            statement.setLong(4, product.getId());
+
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Long idDB = resultSet.getLong(1);
 
-                if (idDB == product.getId()) {
-                    int res = statement.executeUpdate("UPDATE PRODUCT SET NAME = '" + product.getName() + "', DESCRIPTION = '" + product.getDescription() + "', PRICE = '" + product.getPrice() + "' WHERE ID = \'" + product.getId() + "\'");
-                    System.out.println("Update was finished with result " + res);
-                    return product;
-                }
+                int res = statement.executeUpdate();
+                System.out.println("Update was finished with result " + res);
+
+                return product;
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,7 +70,7 @@ public class ProductDAO {
     }
 
     public List<Product> getProducts() throws SQLException {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement()) {
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
 
@@ -84,21 +88,15 @@ public class ProductDAO {
     }
 
     public void deleteProduct(Long id) throws Exception {
-        if(id <= 0)
+        if (id <= 0)
             throw new Exception("Id " + id + " is wrong");
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = getConnection()) {
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
-            while (resultSet.next()) {
-                Long idDB = resultSet.getLong(1);
-                String name = resultSet.getString(2);
-                String description = resultSet.getString(3);
-                int price = resultSet.getInt(4);
+            String sql = "DELETE FROM PRODUCT WHERE ID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.executeUpdate();
 
-                if (idDB == id) {
-                    statement.executeUpdate("DELETE FROM PRODUCT WHERE ID = \'" + id + "\'");
-                }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Something went wrong");

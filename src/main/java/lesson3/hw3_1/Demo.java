@@ -12,13 +12,13 @@ public class Demo {
         Solution solution = new Solution();
         Product product = new Product(999l, "toy1", "testdescription", 40);
        // System.out.println(solution.getProducts().toString());
-      System.out.println(solution.findProductsByPrice(0,0));
-     // System.out.println(solution.findProductsByName("toy2"));
-        //System.out.println(solution.findProductsWithEmptyDescription());
+      System.out.println(solution.findProductsByPrice(120,10));
+     // System.out.println(solution.findProductsByName("bear"));
+       // System.out.println(solution.findProductsWithEmptyDescription());
       // productDAO.save(product);
         //System.out.println(productDAO.deleteProduct(-8l));
       //  System.out.println(productDAO.update(product));
       //  System.out.println(productDAO.getProducts());
-       // solution.deleteProducts();
+       // solution.deleteProduct();
     }
 }

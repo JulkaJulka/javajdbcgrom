@@ -13,7 +13,7 @@ public class Solution {
     private static final String PASS = "sysadmin";
 
     public Long testSavePerformance() throws SQLException{
-        // time execute 246651ms;236434
+        // time execute 246651ms;236434; 225799
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
 
@@ -54,8 +54,8 @@ public class Solution {
     }
 
     public Long testDeleteByIdPerformance() throws SQLException{
-        //time execute 278102ms
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        //time execute 278102ms;234078
+        try (Connection connection = getConnection();Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
             String sql = "DELETE FROM TEST_SPEED WHERE ID = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -98,7 +98,7 @@ public class Solution {
     }
 
     public Long testSelectByIdPerformance() throws SQLException{
-        //time execute 513516ms
+        //time execute 513516ms;268552
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             long start = System.currentTimeMillis();
             String sql = "SELECT * FROM TEST_SPEED WHERE ID = ? ";
@@ -121,8 +121,9 @@ public class Solution {
         }
     }
 
+
     public Long testSelectPerformance() throws SQLException{
-        //time execute 441ms
+        //time execute 441ms;546
         try (Connection connection = getConnection()) {
             long start = System.currentTimeMillis();
             String sql = "SELECT * FROM TEST_SPEED";

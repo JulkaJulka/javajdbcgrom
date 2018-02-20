@@ -14,62 +14,66 @@ public class Solution {
     private static final String USER = "sysadmin";
     private static final String PASS = "sysadmin";
 
-    public List<Product> findProductsByPrice(int price, int delta) throws Exception {
-        if (delta > price)
-            throw new Exception("You enter wrong data");
-        List<Product> products = getProducts();
-        List<Product> findProductsByPrice = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getPrice() >= (price - delta) && product.getPrice() <= (price + delta)) {
-                findProductsByPrice.add(product);
+    public List<Product> findProductsByPrice(int price, int delta) throws SQLException {
+        try (Connection connection = getConnection()) {
 
+            String sql = "SELECT * FROM PRODUCT WHERE PRICE >= ? AND PRICE <= ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, price - delta);
+            statement.setInt(2, price + delta);
+            ResultSet resultSet = statement.executeQuery();
+
+
+            List<Product> products = new ArrayList<>();
+
+            while (resultSet.next()) {
+                products.add(createProduct(resultSet));
             }
+            return products;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong");
         }
-        return findProductsByPrice;
+
     }
 
     public List<Product> findProductsByName(String word) throws Exception {
         validateWord(word);
-        List<Product> products = getProducts();
-        List<Product> findProductsByName = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getName() != null && product.getName().equals(word)) {
-                findProductsByName.add(product);
-
-            }
-        }
-        return findProductsByName;
-
-    }
-
-    public List<Product> findProductsWithEmptyDescription() throws Exception {
-        List<Product> products = getProducts();
-        if (products == null)
-            throw new Exception("DB doesn't have any data");
-        List<Product> findProducts = new ArrayList<>();
-        for (Product product : products) {
-            try {
-                if (product.getDescription() != null && product.getDescription().isEmpty()) {
-                    findProducts.add(product);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new Exception("Something went wrong");
-            }
-        }
-        return findProducts;
-    }
-
-    public List<Product> getProducts() throws SQLException {
         try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
+            String sql = "SELECT * FROM PRODUCT WHERE NAME = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, word);
+            ResultSet resultSet = statement.executeQuery();
+
 
             List<Product> products = new ArrayList<>();
+
             while (resultSet.next()) {
-                Product product = new Product(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getInt(4));
-                products.add(product);
+                products.add(createProduct(resultSet));
+            }
+            return products;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong");
+    }
+}
+    public List<Product> findProductsWithEmptyDescription() throws SQLException {
+        try (Connection connection = getConnection()) {
+
+            String sql = "SELECT * FROM PRODUCT WHERE DESCRIPTION IS NULL";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<Product> products = new ArrayList<>();
+
+            while (resultSet.next()) {
+                products.add(createProduct(resultSet));
             }
             return products;
 
@@ -78,6 +82,7 @@ public class Solution {
             throw new SQLException("Something went wrong");
         }
     }
+
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
@@ -95,5 +100,10 @@ public class Solution {
                 throw new Exception("You enter wrong name " + body + " contains not only letters and digits");
         }
         return true;
+    }
+
+    private Product createProduct(ResultSet resultSet) throws SQLException{
+        Product product = new Product(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getInt(4));
+        return product;
     }
 }
