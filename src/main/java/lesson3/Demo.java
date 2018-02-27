@@ -9,7 +9,8 @@ public class Demo {
     public static void main(String[] args) throws Exception{
         ProductDAO productDAO = new ProductDAO();
         Product product = new Product(106l, "cat", "ooops", 140);
-       System.out.println(productDAO.save(product));
+        System.out.println(productDAO.update(product));
+      // System.out.println(productDAO.save(product));
        // productDAO.deleteProduct(-32l);
       // System.out.println(productDAO.update(product));
       //  productDAO.deleteProduct(1009l);
