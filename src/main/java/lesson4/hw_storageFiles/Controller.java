@@ -47,30 +47,37 @@ public class Controller {
             throw new Exception("Id " + file.getId() +
                     " isn't unacceptable. File can't put to storage with Id " + storage.getId());
         Connection connection = getConnection();
-        connection.setAutoCommit(false);
+        try {
+            connection.setAutoCommit(false);
 
-        Object storageObject = storageDAO.findById(storage.getId());
-        Storage foundStorage = (Storage) storageObject;
-        if(foundStorage == null)
-          throw new Exception("Storage with id " + storage.getId() + " doesn't exist in DB");
 
-        Object fileObject = fileDAO.findById(file.getId());
-        File foundFile = (File) fileObject;
-        if (foundFile == null)
-            throw new Exception("File id " + file.getId() + " doesn't exist in DB");
+            Object storageObject = storageDAO.findById(storage.getId());
+            Storage foundStorage = (Storage) storageObject;
+            if (foundStorage == null)
+                throw new Exception("Storage with id " + storage.getId() + " doesn't exist in DB");
 
-        checkLimitation(foundStorage, foundFile);
-        if (foundFile.getStorageId() == 0) {
-            foundFile.setStorageId(storage.getId());
-            fileDAO.update(foundFile);
+            Object fileObject = fileDAO.findById(file.getId());
+            File foundFile = (File) fileObject;
+            if (foundFile == null)
+                throw new Exception("File id " + file.getId() + " doesn't exist in DB");
 
-            foundStorage.setStorageSize(foundStorage.getStorageSize() + foundFile.getSize());
-            storageDAO.update(foundStorage);
+            checkLimitation(foundStorage, foundFile);
+            if (foundFile.getStorageId() == 0) {
+                foundFile.setStorageId(storage.getId());
+                fileDAO.update(foundFile);
 
-            connection.commit();
-            return foundFile;
+                foundStorage.setStorageSize(foundStorage.getStorageSize() + foundFile.getSize());
+                storageDAO.update(foundStorage);
+
+                connection.commit();
+                return foundFile;
+            }
+            throw new Exception("File with " + file.getId() + " already exist in storage id " + storage.getId());
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
         }
-        throw new Exception("File with " + file.getId() + " already exist in storage id " + storage.getId());
+
     }
 
     /* public File put(Storage storage, File file) throws Exception {
