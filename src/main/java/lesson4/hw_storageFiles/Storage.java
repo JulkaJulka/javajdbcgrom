@@ -28,6 +28,7 @@ public class Storage {
         this.formatsSupported = formatsSupported;
         this.storageCountry = storageCountry;
         this.storageSize = storageSize;
+
     }
 
     public long getId() {
@@ -61,6 +62,14 @@ public class Storage {
 
     public long getStorageSize() {
         return storageSize;
+    }
+
+    public void setFiles(File[] files) {
+        this.files = files;
+    }
+
+    public void setStorageSize(long storageSize) {
+        this.storageSize = storageSize;
     }
 
     @Override

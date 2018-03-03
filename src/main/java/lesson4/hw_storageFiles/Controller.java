@@ -1,20 +1,20 @@
 package lesson4.hw_storageFiles;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
+import static lesson4.hw_storageFiles.GeneralDAO.SIZEMAX_STORAGE;
+import static lesson4.hw_storageFiles.GeneralDAO.getConnection;
+
 
 /**
  * Created by user on 20.02.2018.
  */
 public class Controller {
-    private static final String DB_URL = "jdbc:oracle:thin:@solnalarmlessons.caixfggxri5y.us-east-2.rds.amazonaws.com:1521:ORCL";
-    private static final String USER = "sysadmin";
-    private static final String PASS = "sysadmin";
-    private static long SIZEMAX_STORAGE = 3000l;
+
+
     private FileDAO fileDAO = new FileDAO();
     private StorageDAO storageDAO = new StorageDAO();
-
 
     public File findById(Storage storage, long id) throws Exception {
         if (storage == null)
@@ -31,7 +31,6 @@ public class Controller {
                     return createFileObject(resultSet);
                 } else {
                     return null;
-
                 }
             }
             throw new Exception("File with id " + id + " doesn't exist in Storage with id " + storage.getId());
@@ -48,125 +47,158 @@ public class Controller {
             throw new Exception("Id " + file.getId() +
                     " isn't unacceptable. File can't put to storage with Id " + storage.getId());
         Connection connection = getConnection();
-        try (PreparedStatement statementFiles = connection.prepareStatement("SELECT * FROM FILES WHERE ID = ? ");) {
-            connection.setAutoCommit(false);
+        connection.setAutoCommit(false);
 
-            statementFiles.setLong(1, file.getId());
+        Object storageObject = storageDAO.findById(storage.getId());
+        Storage foundStorage = (Storage) storageObject;
+        if(foundStorage == null)
+          throw new Exception("Storage with id " + storage.getId() + " doesn't exist in DB");
 
-            PreparedStatement statementStorage = connection.prepareStatement("SELECT * FROM STORAGE WHERE ID = ? ");
-            statementStorage.setLong(1, storage.getId());
+        Object fileObject = fileDAO.findById(file.getId());
+        File foundFile = (File) fileObject;
+        if (foundFile == null)
+            throw new Exception("File id " + file.getId() + " doesn't exist in DB");
 
-            ResultSet resultSetFiles = statementFiles.executeQuery();
-            ResultSet resultSetStorage = statementStorage.executeQuery();
-
-            File foundFile = new File();
-            while (resultSetFiles.next()) {
-                foundFile = createFileObject(resultSetFiles);
-                if (!(foundFile.getId() == file.getId() && foundFile.getName().equals(file.getName())))
-                    throw new Exception("File id " + file.getId() + " name " + file.getName() + " doesn't exist in DB");
-            }
-
-            Storage foundStorage = new Storage();
-            while (resultSetStorage.next()) {
-                foundStorage = storageDAO.createStorageObject(resultSetStorage);
-            }
-
-            if (!checkLimitation(foundStorage, foundFile))
-                throw new Exception("Storage " + foundStorage.getId() + "is not empty");
-            if (foundFile.getStorageId() != 0)
-                throw new Exception("File id " + file.getId() + " already busy by storage id " + storage.getId());
+        checkLimitation(foundStorage, foundFile);
+        if (foundFile.getStorageId() == 0) {
             foundFile.setStorageId(storage.getId());
+            fileDAO.update(foundFile);
 
-            PreparedStatement statementPutFiles = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ? ");
-            statementPutFiles.setLong(1, storage.getId());
-            statementPutFiles.setLong(2, file.getId());
-
-            statementPutFiles.executeUpdate();
-
-            PreparedStatement statementUpdateStorage = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = ?  WHERE ID = ? ");
-            statementUpdateStorage.setLong(1, foundStorage.getStorageSize() - foundFile.getSize());
-            statementUpdateStorage.setLong(2, foundStorage.getId());
-
-            statementUpdateStorage.executeUpdate();
+            foundStorage.setStorageSize(foundStorage.getStorageSize() + foundFile.getSize());
+            storageDAO.update(foundStorage);
 
             connection.commit();
             return foundFile;
-
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
         }
+        throw new Exception("File with " + file.getId() + " already exist in storage id " + storage.getId());
     }
 
-    public void delete(Storage storage, File file) throws Exception {
-        if (file == null)
-            throw new Exception("Deleted file with Id " + file.getId() + " is null.");
+    /* public File put(Storage storage, File file) throws Exception {
+         if (file == null)
+             throw new Exception("Putted file  is not detected");
+         if (file.getId() <= 0)
+             throw new Exception("Id " + file.getId() +
+                     " isn't unacceptable. File can't put to storage with Id " + storage.getId());
+         Connection connection = getConnection();
+         try (PreparedStatement statementFiles = connection.prepareStatement("SELECT * FROM FILES WHERE ID = ? ");) {
+             connection.setAutoCommit(false);
 
-        if (storage == null)
-            throw new Exception("Storage with Id " + storage.getId() + " is not detected.");
+             statementFiles.setLong(1, file.getId());
 
-        Connection connection = getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ?  WHERE ID = ? ");
-             PreparedStatement preparedStatementStorage = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE - ?  WHERE ID = ? ");) {
+             PreparedStatement statementStorage = connection.prepareStatement("SELECT * FROM STORAGE WHERE ID = ? ");
+             statementStorage.setLong(1, storage.getId());
 
-            connection.setAutoCommit(false);
-            File deleteFile = findById(storage, file.getId());
-            if (deleteFile == null || !deleteFile.getName().equals(file.getName()))
-                throw new Exception("File id " + file.getId() + " with name " + file.getName() + " doesn't exist in storage id " + storage.getId());
+             ResultSet resultSetFiles = statementFiles.executeQuery();
+             ResultSet resultSetStorage = statementStorage.executeQuery();
 
-            if (deleteFile.getName().equals(file.getName())) {
-                preparedStatement.setLong(2, deleteFile.getId());
-                preparedStatement.setLong(1, 0);
+             File foundFile = new File();
+             while (resultSetFiles.next()) {
+                 foundFile = createFileObject(resultSetFiles);
+                 if (!(foundFile.getId() == file.getId() && foundFile.getName().equals(file.getName())))
+                     throw new Exception("File id " + file.getId() + " name " + file.getName() + " doesn't exist in DB");
+             }
 
-                preparedStatement.executeUpdate();
+             Storage foundStorage = new Storage();
+             while (resultSetStorage.next()) {
+                 foundStorage = storageDAO.createStorageObject(resultSetStorage);
+             }
 
-                preparedStatementStorage.setLong(2, storage.getId());
-                preparedStatementStorage.setLong(1, deleteFile.getSize());
+             if (!checkLimitation(foundStorage, foundFile))
+                 throw new Exception("Storage " + foundStorage.getId() + "is not empty");
+             if (foundFile.getStorageId() != 0)
+                 throw new Exception("File id " + file.getId() + " already busy by storage id " + storage.getId());
+             foundFile.setStorageId(storage.getId());
 
-                preparedStatementStorage.executeUpdate();
-            }
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
-    }
+             PreparedStatement statementPutFiles = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ? ");
+             statementPutFiles.setLong(1, storage.getId());
+             statementPutFiles.setLong(2, file.getId());
 
-    public File transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
-        File transferFile = findById(storageFrom, id);
-        if (transferFile == null)
-            throw new Exception("File with id " + id + " is not found in DB");
-        Connection connection = getConnection();
-        try (PreparedStatement statementUpdateStorTo = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE + ? WHERE ID = ?");
-             PreparedStatement statementUpdateStorFrom = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE - ? WHERE ID = ?");
-             PreparedStatement statementUpdateFile = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ?")) {
-            connection.setAutoCommit(false);
-            Storage storageToDB = storageDAO.findById(storageTo.getId());
-            Storage storageFromDB = storageDAO.findById(storageFrom.getId());
-            checkLimitation(storageToDB, transferFile);
+             statementPutFiles.executeUpdate();
 
-            statementUpdateStorTo.setLong(2, storageToDB.getId());
-            statementUpdateStorTo.setLong(1, transferFile.getSize());
-            statementUpdateStorTo.executeUpdate();
+             PreparedStatement statementUpdateStorage = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = ?  WHERE ID = ? ");
+             statementUpdateStorage.setLong(1, foundStorage.getStorageSize() - foundFile.getSize());
+             statementUpdateStorage.setLong(2, foundStorage.getId());
 
-            transferFile.setStorageId(storageTo.getId());
-            statementUpdateStorFrom.setLong(2, storageFromDB.getId());
-            statementUpdateStorFrom.setLong(1, transferFile.getSize());
-            statementUpdateStorFrom.executeUpdate();
+             statementUpdateStorage.executeUpdate();
 
-            statementUpdateFile.setLong(2, transferFile.getId());
-            statementUpdateFile.setLong(1, storageToDB.getId());
-            statementUpdateFile.executeUpdate();
+             connection.commit();
+             return foundFile;
 
-            connection.commit();
-            return transferFile;
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
-    }
+         } catch (SQLException e) {
+             connection.rollback();
+             throw e;
+         }
+     }
 
-    public List<File> transferAll(Storage storageFrom, Storage storageTo) throws Exception {
+     public void delete(Storage storage, File file) throws Exception {
+         if (file == null)
+             throw new Exception("Deleted file with Id " + file.getId() + " is null.");
+
+         if (storage == null)
+             throw new Exception("Storage with Id " + storage.getId() + " is not detected.");
+
+         Connection connection = getConnection();
+         try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ?  WHERE ID = ? ");
+              PreparedStatement preparedStatementStorage = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE - ?  WHERE ID = ? ");) {
+
+             connection.setAutoCommit(false);
+             File deleteFile = findById(storage, file.getId());
+             if (deleteFile == null || !deleteFile.getName().equals(file.getName()))
+                 throw new Exception("File id " + file.getId() + " with name " + file.getName() + " doesn't exist in storage id " + storage.getId());
+
+             if (deleteFile.getName().equals(file.getName())) {
+                 preparedStatement.setLong(2, deleteFile.getId());
+                 preparedStatement.setLong(1, 0);
+
+                 preparedStatement.executeUpdate();
+
+                 preparedStatementStorage.setLong(2, storage.getId());
+                 preparedStatementStorage.setLong(1, deleteFile.getSize());
+
+                 preparedStatementStorage.executeUpdate();
+             }
+             connection.commit();
+         } catch (SQLException e) {
+             connection.rollback();
+             throw e;
+         }
+     }
+
+     public File transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
+         File transferFile = findById(storageFrom, id);
+         if (transferFile == null)
+             throw new Exception("File with id " + id + " is not found in DB");
+         Connection connection = getConnection();
+         try (PreparedStatement statementUpdateStorTo = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE + ? WHERE ID = ?");
+              PreparedStatement statementUpdateStorFrom = connection.prepareStatement("UPDATE STORAGE SET STORAGE_SIZE = STORAGE_SIZE - ? WHERE ID = ?");
+              PreparedStatement statementUpdateFile = connection.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ?")) {
+             connection.setAutoCommit(false);
+             Storage storageToDB = storageDAO.findById(storageTo.getId());
+             Storage storageFromDB = storageDAO.findById(storageFrom.getId());
+             checkLimitation(storageToDB, transferFile);
+
+             statementUpdateStorTo.setLong(2, storageToDB.getId());
+             statementUpdateStorTo.setLong(1, transferFile.getSize());
+             statementUpdateStorTo.executeUpdate();
+
+             transferFile.setStorageId(storageTo.getId());
+             statementUpdateStorFrom.setLong(2, storageFromDB.getId());
+             statementUpdateStorFrom.setLong(1, transferFile.getSize());
+             statementUpdateStorFrom.executeUpdate();
+
+             statementUpdateFile.setLong(2, transferFile.getId());
+             statementUpdateFile.setLong(1, storageToDB.getId());
+             statementUpdateFile.executeUpdate();
+
+             connection.commit();
+             return transferFile;
+         } catch (SQLException e) {
+             connection.rollback();
+             throw e;
+         }
+     }
+ */
+   /* public List<File> transferAll(Storage storageFrom, Storage storageTo) throws Exception {
         if (storageFrom == null || storageTo == null)
             throw new Exception("You enter wrong data");
 
@@ -223,6 +255,7 @@ public class Controller {
             throw e;
         }
     }
+*/
 
     public boolean checkFormatsSupported(Storage storage, File file) throws Exception {
 
@@ -263,9 +296,9 @@ public class Controller {
         return true;
     }
 
-    private Connection getConnection() throws SQLException {
+    /*private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
-    }
+    }*/
 
     private File createFileObject(ResultSet resultSet) throws SQLException {
         File file = new File(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
