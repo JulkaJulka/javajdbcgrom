@@ -215,10 +215,6 @@ public class Controller {
         return true;
     }
 
-    /*private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
-    }*/
-
     private File createFileObject(ResultSet resultSet) throws SQLException {
         File file = new File(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
         return file;
