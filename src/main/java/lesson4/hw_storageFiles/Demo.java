@@ -33,11 +33,11 @@ public class Demo {
        // storageDAO.deleteStorage(133l);
         Controller controller = new Controller();
        //System.out.println(controller.findById(storage2,8556355635284043560l));
-     // System.out.println(controller.put(storage1,file3));
-      controller.delete(storage1, file3);
+     // System.out.println(controller.put(storage2,file3));
+      //controller.delete(storage1, file3);
      //System.out.println(controller.transferAll(storage2, storage1));
 
-     // System.out.println(controller.transferFile( storage1,storage2, 6443883591460032763l));
+      System.out.println(controller.transferFile( storage1,storage2, 6443883591460032763l));
 
     }
 }

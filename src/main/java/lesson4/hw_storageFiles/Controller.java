@@ -59,17 +59,17 @@ public class Controller {
                 throw new Exception("File id " + file.getId() + " doesn't exist in DB");
 
             checkLimitation(foundStorage, foundFile);
-            if(foundFile.getStorageId() != 0)
+            if (foundFile.getStorageId() != 0)
                 throw new Exception("File with " + file.getId() + " already exist in storage id " + foundFile.getStorageId());
 
-                foundFile.setStorageId(storage.getId());
-                fileDAO.update(foundFile);
+            foundFile.setStorageId(storage.getId());
+            fileDAO.update(foundFile);
 
-                foundStorage.setStorageSize(foundStorage.getStorageSize() + foundFile.getSize());
-                storageDAO.update(foundStorage);
+            foundStorage.setStorageSize(foundStorage.getStorageSize() + foundFile.getSize());
+            storageDAO.update(foundStorage);
 
-                connection.commit();
-                return foundFile;
+            connection.commit();
+            return foundFile;
 
         } catch (SQLException e) {
             connection.rollback();
@@ -109,25 +109,23 @@ public class Controller {
     public File transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 
         Connection connection = getConnection();
-        try  {
+        try {
             connection.setAutoCommit(false);
             File transferFile = findById(storageFrom, id);
             if (transferFile == null)
                 throw new Exception("File with id " + id + " is not found in DB");
-            Storage storageToDB = (Storage)storageDAO.findById(storageTo.getId());
-            Storage storageFromDB = (Storage)storageDAO.findById(storageFrom.getId());
-//if(transferFile.getStorageId() == storageToDB.getId())
-   File transferFileAfterPut = transferFile;
-            transferFileAfterPut.setStorageId( 0l);
-            fileDAO.update(transferFileAfterPut);
-    put(storageToDB, transferFileAfterPut);
-transferFileAfterPut.setStorageId(transferFile.getStorageId());
-            fileDAO.update(transferFileAfterPut);
-            delete(storageFromDB,transferFile);
+            Storage storageToDB = (Storage) storageDAO.findById(storageTo.getId());
+            Storage storageFromDB = (Storage) storageDAO.findById(storageFrom.getId());
 
+            transferFile.setStorageId(0l);
+            fileDAO.update(transferFile);
+            File putFile = put(storageToDB, transferFile);
+
+            storageFromDB.setStorageSize(storageFromDB.getStorageSize() - transferFile.getSize());
+            storageDAO.update(storageFromDB);
 
             connection.commit();
-            return transferFile;
+            return putFile;
         } catch (SQLException e) {
             connection.rollback();
             throw e;
