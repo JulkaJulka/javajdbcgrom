@@ -26,6 +26,8 @@ public class Demo {
         Storage storage1 = new Storage(12l,null, formats, "UK", 2000l);
         Storage storage2 = new Storage(122l, formats, "Ukraine", 3000l);
         Storage storage3 = new Storage(144l, formats, "Ukraine", 3000l);
+        Storage storage13 = new Storage(13l,null, formats, "UK", 2000l);
+        Storage storage14 = new Storage(14l, formats, "Ukraine", 3000l);
       // storageDAO.save(storage3);
 //storageDAO.delete(144l);
        //System.out.println(storageDAO.findById(122l));
@@ -37,7 +39,7 @@ public class Demo {
       //controller.delete(storage1, file3);
      //System.out.println(controller.transferAll(storage2, storage1));
 
-      System.out.println(controller.transferFile( storage1,storage2, 6443883591460032763l));
-
+     // System.out.println(controller.transferFile( storage1,storage2, 6443883591460032763l));
+        System.out.println(controller.transferAll(storage14,storage13));
     }
 }
