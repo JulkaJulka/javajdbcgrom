@@ -42,6 +42,7 @@ public abstract class GeneralDAO<T> {
         }
     }
 
+
     public T save(T t) throws Exception {
         if (t == null)
             throw new Exception("You enter wrong data");

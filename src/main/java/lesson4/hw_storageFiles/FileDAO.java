@@ -7,6 +7,31 @@ import java.sql.*;
  * Created by user on 22.02.2018.
  */
 public class FileDAO extends GeneralDAO {
+    public File findById(Storage storage, long id) throws Exception {
+        if (storage == null)
+            throw new Exception("You enter wrong data");
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"FILE\" WHERE ID = ? ");
+
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                if (resultSet.getLong(5) == storage.getId()) {
+                    return createFileObject(resultSet);
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong");
+        }
+    }
+    private File createFileObject(ResultSet resultSet) throws SQLException {
+        File file = new File(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
+        return file;
+    }
 
     @Override
     public String setNameTableDB(String nameTableDB) {

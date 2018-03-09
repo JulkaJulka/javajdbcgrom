@@ -13,7 +13,7 @@ public class JDBCFirstStep {
     private static final String PASS = "sysadmin";
 
 
-  private   ResultSet jdbcStart() throws Exception{
+  public   ResultSet jdbcStart() throws Exception{
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS); Statement statement = connection.createStatement()) {
             //1. DB driver
             //2. create connection

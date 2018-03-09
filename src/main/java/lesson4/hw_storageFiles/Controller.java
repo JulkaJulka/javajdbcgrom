@@ -18,34 +18,10 @@ public class Controller {
     private FileDAO fileDAO = new FileDAO();
     private StorageDAO storageDAO = new StorageDAO();
 
-    public File findById(Storage storage, long id) throws Exception {
-        if (storage == null)
-            throw new Exception("You enter wrong data");
-
-        try (Connection connection = getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"FILE\" WHERE ID = ? ");
-
-            preparedStatement.setLong(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                if (resultSet.getLong(5) == storage.getId()) {
-                    return createFileObject(resultSet);
-                }
-            }
-            return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Something went wrong");
-        }
-    }
 
     public File put(Storage storage, File file) throws Exception {
         if (file == null)
             throw new Exception("Putted file  is not detected");
-        if (file.getId() <= 0)
-            throw new Exception("Id " + file.getId() +
-                    " isn't unacceptable. File can't put to storage with Id " + storage.getId());
         Connection connection = getConnection();
         try {
             connection.setAutoCommit(false);
@@ -59,11 +35,10 @@ public class Controller {
             File foundFile = (File) fileObject;
             if (foundFile == null)
                 throw new Exception("File id " + file.getId() + " doesn't exist in DB");
-
             checkLimitation(foundStorage, foundFile);
-            if (foundFile.getStorageId() != 0)
-                throw new Exception("File with " + file.getId() + " already exist in storage id " + foundFile.getStorageId());
-
+            if (foundFile.getStorageId() != 0) {
+                return null;
+            }
             foundFile.setStorageId(storage.getId());
             fileDAO.update(foundFile);
 
@@ -72,6 +47,7 @@ public class Controller {
 
             connection.commit();
             return foundFile;
+
 
         } catch (SQLException e) {
             connection.rollback();
@@ -90,7 +66,7 @@ public class Controller {
         try {
             connection.setAutoCommit(false);
 
-            File deleteFile = findById(storage, file.getId());
+            File deleteFile = fileDAO.findById(storage, file.getId());
             if (deleteFile.equals(file)) {
                 deleteFile.setStorageId(0);
                 fileDAO.update(deleteFile);
@@ -113,7 +89,7 @@ public class Controller {
         Connection connection = getConnection();
         try {
             connection.setAutoCommit(false);
-            File transferFile = findById(storageFrom, id);
+            File transferFile = fileDAO.findById(storageFrom, id);
             if (transferFile == null)
                 throw new Exception("File with id " + id + " is not found in DB");
             Storage storageToDB = (Storage) storageDAO.findById(storageTo.getId());
@@ -143,8 +119,8 @@ public class Controller {
         try (PreparedStatement statementFilesDBFrom = connection.prepareStatement("SELECT * FROM \"FILE\" WHERE STORAGE_ID = ?")) {
             connection.setAutoCommit(false);
 
-            Storage storageDBFrom = (Storage)storageDAO.findById(storageFrom.getId());
-            Storage storageDBTo = (Storage)storageDAO.findById(storageTo.getId());
+            Storage storageDBFrom = (Storage) storageDAO.findById(storageFrom.getId());
+            Storage storageDBTo = (Storage) storageDAO.findById(storageTo.getId());
 
             if (storageDBFrom == null || storageDBTo == null)
                 throw new Exception("Storage id " + storageDBFrom.getId() + " is not found in DB");
@@ -156,12 +132,12 @@ public class Controller {
             statementFilesDBFrom.setLong(1, storageDBFrom.getId());
             ResultSet resultSetFilesDBFrom = statementFilesDBFrom.executeQuery();
 
-           List<File> filesStorageFrom = new ArrayList<>();
+            List<File> filesStorageFrom = new ArrayList<>();
 
 
             while (resultSetFilesDBFrom.next()) {
-                File file = (File)fileDAO.createObject(resultSetFilesDBFrom);
-                if(findById(storageDBTo, file.getId()) != null)
+                File file = (File) fileDAO.createObject(resultSetFilesDBFrom);
+                if (fileDAO.findById(storageDBTo, file.getId()) != null)
                     throw new Exception("Storage id " + storageDBTo.getId() + " can't contains the same files id " + file.getId());
                 checkLimitation(storageDBTo, file);
                 filesStorageFrom.add(transferFile(storageDBFrom, storageDBTo, file.getId()));
@@ -206,6 +182,8 @@ public class Controller {
             throw new Exception("Putted file  is not detected");
         if (storage == null)
             throw new Exception("Wrong data of storage");
+        if (file.getStorageId() == storage.getId())
+            throw new Exception("File id " + file.getId() + " already exist in Storage id " + file.getStorageId());
         if (storage.getStorageSize() + file.getSize() > SIZEMAX_STORAGE)
             throw new Exception("Not enough space in storage id " + storage.getId());
         if (!checkFormatsSupported(storage, file))
@@ -215,8 +193,5 @@ public class Controller {
         return true;
     }
 
-    private File createFileObject(ResultSet resultSet) throws SQLException {
-        File file = new File(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
-        return file;
-    }
+
 }
