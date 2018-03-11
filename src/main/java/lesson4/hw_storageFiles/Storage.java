@@ -74,12 +74,10 @@ public class Storage {
 
     @Override
     public String toString() {
-        return "Storage{" +
-                "id=" + id +
-                ", files=" + Arrays.toString(files) +
-                ", formatsSupported=" + Arrays.toString(formatsSupported) +
-                ", storageCountry='" + storageCountry + '\'' +
-                ", storageSize=" + storageSize +
-                '}';
+        return  id +
+                ", " + Arrays.toString(files) +
+                ", " + Arrays.toString(formatsSupported) +
+                ", '" + storageCountry + '\'' +
+                ", " + storageSize;
     }
 }

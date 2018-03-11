@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static lesson4.hw_storageFiles.GeneralDAO.SIZEMAX_STORAGE;
-import static lesson4.hw_storageFiles.GeneralDAO.getConnection;
+import static lesson4.hw_storageFiles.GeneralDAO.*;
 
 
 /**
@@ -32,9 +31,20 @@ public class Controller {
                 throw new Exception("Storage with id " + storage.getId() + " doesn't exist in DB");
 
             Object fileObject = fileDAO.findById(file.getId());
+
             File foundFile = (File) fileObject;
-            if (foundFile == null)
-                throw new Exception("File id " + file.getId() + " doesn't exist in DB");
+            if (fileObject == null) {
+                checkLimitation(foundStorage, file);
+                if (file.getStorageId() == 0){
+                fileDAO.save(file);
+                file.setStorageId(storage.getId());
+                fileDAO.update(file);
+                foundStorage.setStorageSize(foundStorage.getStorageSize() + file.getSize());
+                storageDAO.update(foundStorage);
+                return file;}
+            }
+
+
             checkLimitation(foundStorage, foundFile);
             if (foundFile.getStorageId() != 0) {
                 return null;

@@ -7,6 +7,10 @@ import java.sql.*;
  * Created by user on 22.02.2018.
  */
 public class FileDAO extends GeneralDAO {
+    static {
+        setIn("INSERT INTO \"FILE\" (ID, NAME, \"FORMAT\", \"SIZE\", STORAGE_ID) VALUES(?, ?, ?, ?, ?)");
+    }
+
     public File findById(Storage storage, long id) throws Exception {
         if (storage == null)
             throw new Exception("You enter wrong data");
@@ -28,10 +32,12 @@ public class FileDAO extends GeneralDAO {
             throw new SQLException("Something went wrong");
         }
     }
+
     private File createFileObject(ResultSet resultSet) throws SQLException {
         File file = new File(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
         return file;
     }
+
 
     @Override
     public String setNameTableDB(String nameTableDB) {
@@ -44,29 +50,35 @@ public class FileDAO extends GeneralDAO {
         return "INSERT INTO \"FILE\" (ID, NAME, \"FORMAT\", \"SIZE\", STORAGE_ID) VALUES(?, ?, ?, ?, ?)";
     }
 
+    public String setInsertObjectToDBRow() {
+        return "INSERT INTO \"FILE\" (ID, NAME, \"FORMAT\", \"SIZE\", STORAGE_ID) VALUES(?, ?, ?, ?, ?)";
+    }
+
     @Override
     public String setUpdateObjectToDBRow(String updateObjectToDBRow) {
         return "UPDATE \"FILE\" SET NAME = ?, \"FORMAT\"  = ?, \"SIZE\" = ?, STORAGE_ID = ?  WHERE ID = ?";
     }
 
     @Override
-    public Object createObject(ResultSet resultSet) throws SQLException{
+    public File createObject(ResultSet resultSet) throws SQLException {
         File file = new File(resultSet.getLong(1), resultSet.getString(2),
                 resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
 
         return file;
     }
 
+
     @Override
     public void insertObjectToDB(Object o,PreparedStatement preparedStatement) throws SQLException {
         File file = (File) o;
-        preparedStatement.setLong(1, file.getId());
-        preparedStatement.setString(2, file.getName());
-        preparedStatement.setString(3, file.getFormat());
-        preparedStatement.setLong(4, file.getSize());
-        preparedStatement.setLong(5, 0l);
+            preparedStatement.setLong(1, file.getId());
+            preparedStatement.setString(2, file.getName());
+            preparedStatement.setString(3, file.getFormat());
+            preparedStatement.setLong(4, file.getSize());
+            preparedStatement.setLong(5, 0l);
+       // preparedStatement.executeUpdate();
+}
 
-    }
 
     @Override
     public void updateObjectToDB(Object o, PreparedStatement statement) throws SQLException {

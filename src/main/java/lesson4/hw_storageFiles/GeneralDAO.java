@@ -17,6 +17,11 @@ public abstract class GeneralDAO<T> {
 
     public abstract String setNameTableDB(String nameTableDB);
 
+    public static   String setIn(String insertObjectToDBRow){
+        GeneralDAO.insertObjectToDBRow = insertObjectToDBRow;
+        return insertObjectToDBRow;
+    }
+
     public abstract String setInsertObjectToDBRow(String insertObjectToDBRow) ;
 
     public abstract String setUpdateObjectToDBRow(String updateObjectToDBRow) ;
@@ -47,13 +52,10 @@ public abstract class GeneralDAO<T> {
         if (t == null)
             throw new Exception("You enter wrong data");
 
-        try (Connection connection = getConnection();PreparedStatement preparedStatement = connection.prepareStatement(setInsertObjectToDBRow(insertObjectToDBRow))) {
-
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(setInsertObjectToDBRow(insertObjectToDBRow));
             insertObjectToDB(t, preparedStatement);
-
-            int res = preparedStatement.executeUpdate();
-            System.out.println("save was finished with result " + res);
-
+int res = preparedStatement.executeUpdate();
             return t;
 
         } catch (SQLException e) {

@@ -65,13 +65,11 @@ public class File {
 
     @Override
     public String toString() {
-        return "File{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", format='" + format + '\'' +
-                ", size=" + size +
-                ", storageId=" + storageId +
-                '}';
+        return  id +
+                ", " + name + '\'' +
+                ", " + format + '\'' +
+                ", " + size +
+                ", " + storageId;
     }
 
     @Override
