@@ -26,7 +26,7 @@ public abstract class GeneralDAO<T> {
 
     public abstract String setUpdateObjectToDBRow(String updateObjectToDBRow) ;
 
-    public  T findById(long id) throws Exception {
+    public   T findById(long id) throws Exception {
         String sql = "SELECT * FROM " + setNameTableDB(nameTableDB) + " WHERE ID = ? ";
 
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -99,7 +99,7 @@ int res = preparedStatement.executeUpdate();
         }
     }
 
-    public abstract T createObject(ResultSet resultSet) throws SQLException;
+    public abstract <T> T createObject(ResultSet resultSet) throws SQLException;
 
     public abstract void insertObjectToDB(T t, PreparedStatement preparedStatement) throws SQLException;
 

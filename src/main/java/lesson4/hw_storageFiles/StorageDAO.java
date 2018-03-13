@@ -13,6 +13,7 @@ public class StorageDAO extends GeneralDAO {
         return "STORAGE";
     }
 
+
     @Override
     public String setInsertObjectToDBRow(String insertObjectToDBRow) {
         return "INSERT INTO STORAGE (ID, FORMATS_SUPPORTED, STORAGE_COUNTRY, STORAGE_SIZE) VALUES(?, ?, ?, ?)";
@@ -22,6 +23,11 @@ public class StorageDAO extends GeneralDAO {
     public String setUpdateObjectToDBRow(String updateObjectToDBRow) {
         return "UPDATE STORAGE SET FORMATS_SUPPORTED = ?, STORAGE_COUNTRY = ?, STORAGE_SIZE = ?  WHERE ID = ?";
     }
+
+    /*@Override
+    public Storage findById(long id) throws Exception {
+        return (Storage) super.findById(id);
+    }*/
 
     @Override
     public Storage createObject(ResultSet resultSet) throws SQLException {

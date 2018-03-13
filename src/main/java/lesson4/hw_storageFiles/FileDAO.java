@@ -11,6 +11,11 @@ public class FileDAO extends GeneralDAO {
         setIn("INSERT INTO \"FILE\" (ID, NAME, \"FORMAT\", \"SIZE\", STORAGE_ID) VALUES(?, ?, ?, ?, ?)");
     }
 
+   /* @Override
+    public File findById(long id) throws Exception {
+        return (File)super.findById(id);
+    }*/
+
     public File findById(Storage storage, long id) throws Exception {
         if (storage == null)
             throw new Exception("You enter wrong data");
@@ -75,7 +80,7 @@ public class FileDAO extends GeneralDAO {
             preparedStatement.setString(2, file.getName());
             preparedStatement.setString(3, file.getFormat());
             preparedStatement.setLong(4, file.getSize());
-            preparedStatement.setLong(5, 0l);
+            preparedStatement.setLong(5, file.getStorageId());
        // preparedStatement.executeUpdate();
 }
 
