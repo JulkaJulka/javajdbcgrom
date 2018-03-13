@@ -19,7 +19,7 @@ public class Demo {
      //   fileDAO.save(file6);
        // System.out.println(file1.getId());
      //  System.out.println(fileDAO.update(file3));
-     // System.out.println(fileDAO.findById(2844780257780425l));
+     System.out.println(fileDAO.findById(2844780257780425l));
    //    System.out.println(fileDAO.save(file5));
       // fileDAO.delete(6825953426171707583l);
        // fileDAO.insertObjectToDB(file2);
@@ -40,7 +40,7 @@ public class Demo {
      //  System.out.println(fileDAO.save(file7));
     //  System.out.println(controller.put(storage1,file7));
        //System.out.println(controller.findById(storage2,8556355635284043560l));
-     System.out.println(controller.transferFile(storage1, storage2,950097981352981114l));
+   //  System.out.println(controller.transferFile(storage2, storage1,950097981352981114l));
 
       //controller.delete(storage1, file3);
      //System.out.println(controller.transferAll(storage2, storage1));

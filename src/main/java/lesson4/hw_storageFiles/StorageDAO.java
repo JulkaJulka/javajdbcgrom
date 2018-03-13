@@ -24,7 +24,7 @@ public class StorageDAO extends GeneralDAO {
     }
 
     @Override
-    public Object createObject(ResultSet resultSet) throws SQLException {
+    public Storage createObject(ResultSet resultSet) throws SQLException {
         Storage storage = new Storage(resultSet.getLong(1), createArrayFromString(resultSet.getString(2)),
                 resultSet.getString(3), resultSet.getLong(4));
 

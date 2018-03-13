@@ -26,7 +26,7 @@ public abstract class GeneralDAO<T> {
 
     public abstract String setUpdateObjectToDBRow(String updateObjectToDBRow) ;
 
-    public T findById(long id) throws Exception {
+    public  T findById(long id) throws Exception {
         String sql = "SELECT * FROM " + setNameTableDB(nameTableDB) + " WHERE ID = ? ";
 
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

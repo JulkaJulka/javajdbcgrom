@@ -105,15 +105,18 @@ public class Controller {
             Storage storageToDB = (Storage) storageDAO.findById(storageTo.getId());
             Storage storageFromDB = (Storage) storageDAO.findById(storageFrom.getId());
 
-            transferFile.setStorageId(0l);
+            transferFile.setStorageId(storageToDB.getId());
             fileDAO.update(transferFile);
-            File putFile = put(storageToDB, transferFile);
 
             storageFromDB.setStorageSize(storageFromDB.getStorageSize() - transferFile.getSize());
             storageDAO.update(storageFromDB);
 
+            storageToDB.setStorageSize(storageToDB.getStorageSize() + transferFile.getSize());
+            storageDAO.update(storageToDB);
+
+
             connection.commit();
-            return putFile;
+            return transferFile;
         } catch (SQLException e) {
             connection.rollback();
             throw e;

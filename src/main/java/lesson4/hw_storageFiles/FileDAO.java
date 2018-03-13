@@ -63,7 +63,7 @@ public class FileDAO extends GeneralDAO {
     public File createObject(ResultSet resultSet) throws SQLException {
         File file = new File(resultSet.getLong(1), resultSet.getString(2),
                 resultSet.getString(3), resultSet.getLong(4), resultSet.getLong(5));
-
+//Object o = (Object) file;
         return file;
     }
 
