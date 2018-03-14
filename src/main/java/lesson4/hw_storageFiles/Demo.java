@@ -12,7 +12,7 @@ public class Demo {
         File file3 = new File(2443242634812634234l,"Test26","sss", 111l, 0l );
         File file4 = new File(1846656661860262572l,"Test2","xml", 100l, 101l );
         File file6 = new File(2894972153822915406l,"Test4444","xml", 120l, 0l );
-        File file7 = new File("Transfer2","xml",10,0l);
+        File file7 = new File(5926747254620248688l,"Transfer5","xml",10,0l);
         File file5 = new File("Terrr","txt", 100l, 0l );
         File[] files = {file2, file3, file4, file5};
         String[] formats = {"txt", "xml"};
