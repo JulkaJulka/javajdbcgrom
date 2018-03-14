@@ -15,6 +15,7 @@ public abstract class GeneralDAO<T> {
     public static String insertObjectToDBRow = "";
     public static String updateObjectToDBRow = "";
 
+
     public abstract String setNameTableDB(String nameTableDB);
 
     public static   String setIn(String insertObjectToDBRow){

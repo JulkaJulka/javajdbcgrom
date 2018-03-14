@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by user on 22.02.2018.
  */
-public class StorageDAO extends GeneralDAO {
+public  class  StorageDAO extends GeneralDAO<Storage> {
 
 
     @Override
@@ -39,8 +39,8 @@ public class StorageDAO extends GeneralDAO {
     }
 
     @Override
-    public void insertObjectToDB(Object o, PreparedStatement preparedStatement) throws SQLException {
-        Storage storage = (Storage) o;
+    public void insertObjectToDB(Storage storage, PreparedStatement preparedStatement) throws SQLException {
+       // Storage storage = (Storage) o;
         preparedStatement.setLong(1, storage.getId());
         preparedStatement.setString(2, storage.getFormatsSupportedString());
         preparedStatement.setString(3, storage.getStorageCountry());
@@ -49,8 +49,8 @@ public class StorageDAO extends GeneralDAO {
     }
 
     @Override
-    public void updateObjectToDB(Object o, PreparedStatement statement) throws SQLException {
-        Storage storage = (Storage) o;
+    public void updateObjectToDB(Storage storage, PreparedStatement statement) throws SQLException {
+      //  Storage storage = (Storage) o;
         statement.setLong(4, storage.getId());
         statement.setString(1, storage.getFormatsSupportedString());
         statement.setString(2, storage.getStorageCountry());

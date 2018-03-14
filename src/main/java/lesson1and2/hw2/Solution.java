@@ -95,19 +95,51 @@ public class Solution {
         }
     }
 
-    public void changeDescription() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS); Statement statement = connection.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 100")) {
+   /* public void changeDescription() throws SQLException {
+        String sql ="SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 40";
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS); Statement statement = connection.createStatement(
+                ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+             ResultSet resultSet = statement.executeQuery("SELECT ID, NAME, DESCRIPTION, PRICE FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 40")) {
+
+
+            while (resultSet.next()) {
+                System.out.println(resultSet);
+                String description = resultSet.getString(3);
+                String needDescription = description.substring(0, 40);
+                int indexLastPoint = needDescription.lastIndexOf('.');
+                String outputDescription = needDescription.substring(0, indexLastPoint + 1);
+                resultSet.absolute(resultSet.getInt(1));
+            //    resultSet.updateString("DESCRIPTION", "\"" + outputDescription + "\"");
+                resultSet.updateRow();
+                  String sql1 = "UPDATE PRODUCT SET DESCRIPTION = \'" + outputDescription + "\' WHERE LENGTH(DESCRIPTION) > 40";
+                System.out.println(sql1);
+                  // statement.executeUpdate(sql);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong");
+        }
+    }*/
+    public void changeDescription3() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement statement = connection.createStatement())
+           {
+               ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT ");
 
                 while (resultSet.next()) {
                     String description = resultSet.getString(3);
-                    String needDescription = description.substring(0, 100);
+                    String needDescription = description.substring(0, 40);
+                    Long id = resultSet.getLong(1);
                     int indexLastPoint = needDescription.lastIndexOf('.');
                     String outputDescription = needDescription.substring(0, indexLastPoint + 1);
-                    String sql = "UPDATE PRODUCT SET DESCRIPTION = \'" + outputDescription + "\' WHERE LENGTH(DESCRIPTION) > 100";
-                    statement.executeUpdate(sql);
+
+                     String sql = "UPDATE PRODUCT SET DESCRIPTION = \'" + outputDescription + "\' WHERE LENGTH(DESCRIPTION) > 40 AND ID = " + id ;
+                    System.out.println(sql);
+                      statement.executeUpdate(sql);
                 }
-            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,18 +151,20 @@ public class Solution {
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS); Statement statement = connection.prepareStatement("SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 100")) {
             // try (ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 100"))
             {
-                String sql = "UPDATE PRODUCT SET DESCRIPTION = ?  WHERE LENGTH(DESCRIPTION) > 100";
+                String sql = "UPDATE PRODUCT SET DESCRIPTION = ?  WHERE LENGTH(DESCRIPTION) > 40 AND ID = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 100");
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT WHERE LENGTH(DESCRIPTION) > 40");
 
                 while (resultSet.next()) {
+                    Long id = resultSet.getLong(1);
                     String description = resultSet.getString(3);
-                    String needDescription = description.substring(0, 100);
+                    String needDescription = description.substring(0, 40);
                     int indexLastPoint = needDescription.lastIndexOf('.');
                     String outputDescription = needDescription.substring(0, indexLastPoint + 1);
 
                     preparedStatement.setString(1, outputDescription);
+                    preparedStatement.setLong(2, id);
                     preparedStatement.executeUpdate();
                     // statement.executeUpdate(sql);
 

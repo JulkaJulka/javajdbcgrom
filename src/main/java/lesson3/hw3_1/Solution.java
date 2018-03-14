@@ -43,10 +43,10 @@ public class Solution {
         validateWord(word);
         try (Connection connection = getConnection()) {
 
-            String sql = "SELECT * FROM PRODUCT WHERE NAME = ?";
+            String sql = "SELECT * FROM PRODUCT WHERE NAME LIKE ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1, word);
+            statement.setString(1, '%' + word + '%');
             ResultSet resultSet = statement.executeQuery();
 
 

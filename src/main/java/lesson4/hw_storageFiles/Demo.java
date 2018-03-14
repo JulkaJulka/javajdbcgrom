@@ -24,7 +24,6 @@ public class Demo {
       // fileDAO.delete(6825953426171707583l);
        // fileDAO.insertObjectToDB(file2);
         //System.out.println((file7));
-
         StorageDAO storageDAO = new StorageDAO();
         Storage storage1 = new Storage(12l,null, formats, "UK", 2000l);
         Storage storage2 = new Storage(122l, formats, "Ukraine", 3000l);
@@ -33,7 +32,7 @@ public class Demo {
         Storage storage14 = new Storage(14l, formats, "Ukraine", 3000l);
       // storageDAO.save(storage3);
 //storageDAO.delete(144l);
-       //System.out.println(storageDAO.findById(122l));
+     //  System.out.println(storageDAO.findById(122l));
       //  System.out.println( storageDAO.update(storage2));
        // storageDAO.deleteStorage(133l);
         Controller controller = new Controller();

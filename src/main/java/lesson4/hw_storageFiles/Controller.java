@@ -15,7 +15,7 @@ public class Controller {
 
 
     private FileDAO fileDAO = new FileDAO();
-    private StorageDAO storageDAO = new StorageDAO();
+   private StorageDAO storageDAO = new StorageDAO() ;
 
 
     public File put(Storage storage, File file) throws Exception {
@@ -25,18 +25,17 @@ public class Controller {
         try {
             connection.setAutoCommit(false);
 
-            Object storageObject = storageDAO.findById(storage.getId());
-            Storage foundStorage = (Storage) storageObject;
+            Storage foundStorage = storageDAO.findById(storage.getId());
+
             if (foundStorage == null)
                 throw new Exception("Storage with id " + storage.getId() + " doesn't exist in DB");
 
-            Object fileObject = fileDAO.findById(file.getId());
+            File foundFile = fileDAO.findById(file.getId());
 
-            File foundFile = (File) fileObject;
-            if(foundFile == null)
+            if(foundFile != null)
                 return null;
 
-            if (fileObject == null) {
+            if (foundFile == null) {
                 checkLimitation(foundStorage, file);
                 if (file.getStorageId() == 0){
                     file.setStorageId(storage.getId());
