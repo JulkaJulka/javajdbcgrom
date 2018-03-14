@@ -33,6 +33,8 @@ public class Controller {
             Object fileObject = fileDAO.findById(file.getId());
 
             File foundFile = (File) fileObject;
+            if(foundFile == null)
+                return null;
 
             if (fileObject == null) {
                 checkLimitation(foundStorage, file);

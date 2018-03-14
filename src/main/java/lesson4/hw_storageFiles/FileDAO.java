@@ -81,7 +81,6 @@ public class FileDAO extends GeneralDAO {
             preparedStatement.setString(3, file.getFormat());
             preparedStatement.setLong(4, file.getSize());
             preparedStatement.setLong(5, file.getStorageId());
-       // preparedStatement.executeUpdate();
 }
 
 

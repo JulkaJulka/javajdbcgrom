@@ -99,7 +99,7 @@ int res = preparedStatement.executeUpdate();
         }
     }
 
-    public abstract <T> T createObject(ResultSet resultSet) throws SQLException;
+    public abstract < T> T createObject(ResultSet resultSet) throws SQLException;
 
     public abstract void insertObjectToDB(T t, PreparedStatement preparedStatement) throws SQLException;
 
