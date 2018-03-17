@@ -150,7 +150,7 @@ public class Controller {
                 checkLimitation(storageDBTo, file);
 
                 filesStorageFrom.add(transferFile(storageDBFrom, storageDBTo, file.getId()));
-                //transferFile(storageDBFrom,storageDBTo,file.getId());
+
             }
 
             connection.commit();
