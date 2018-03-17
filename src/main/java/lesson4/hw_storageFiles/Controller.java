@@ -32,9 +32,6 @@ public class Controller {
 
             File foundFile = fileDAO.findById(file.getId());
 
-            if(foundFile != null)
-                return null;
-
             if (foundFile == null) {
                 checkLimitation(foundStorage, file);
                 if (file.getStorageId() == 0){
@@ -45,7 +42,6 @@ public class Controller {
                     connection.commit();
                 return file;}
             }
-
 
             checkLimitation(foundStorage, foundFile);
             if (foundFile.getStorageId() != 0) {
@@ -100,7 +96,7 @@ public class Controller {
 
         Connection connection = getConnection();
         try {
-            connection.setAutoCommit(false);
+
             File transferFile = fileDAO.findById(storageFrom, id);
             if (transferFile == null)
                 throw new Exception("File with id " + id + " is not found in DB");
@@ -115,11 +111,9 @@ public class Controller {
             storageTo.setStorageSize(storageTo.getStorageSize() + transferFile.getSize());
             storageDAO.update(storageTo);
 
-            connection.commit();
             return transferFile;
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
+            throw new SQLException("Something went wrong");
         }
     }
 
@@ -132,13 +126,14 @@ public class Controller {
         try (PreparedStatement statementFilesDBFrom = connection.prepareStatement("SELECT * FROM \"FILE\" WHERE STORAGE_ID = ?")) {
             connection.setAutoCommit(false);
 
-            Storage storageDBFrom = (Storage) storageDAO.findById(storageFrom.getId());
-            Storage storageDBTo = (Storage) storageDAO.findById(storageTo.getId());
+            Storage storageDBFrom = storageDAO.findById(storageFrom.getId());
+            Storage storageDBTo =  storageDAO.findById(storageTo.getId());
 
-            if (storageDBFrom == null || storageDBTo == null)
-                throw new Exception("Storage id " + storageDBFrom.getId() + " is not found in DB");
+            if (storageDBFrom == null)
+                throw new Exception("Storage id " + storageFrom.getId() + " is not found in DB");
             if (storageDBTo == null)
-                throw new Exception("Storage id " + storageDBTo.getId() + " is not found in DB");
+                throw new Exception("Storage id " + storageTo.getId() + " is not found in DB");
+
             if (storageDBFrom.getStorageSize() > SIZEMAX_STORAGE - storageDBTo.getStorageSize())
                 throw new Exception("Size of transfer files exceeds free size of storageTo " + storageTo.getId());
 
@@ -149,11 +144,13 @@ public class Controller {
 
 
             while (resultSetFilesDBFrom.next()) {
-                File file = (File) fileDAO.createObject(resultSetFilesDBFrom);
+                File file = fileDAO.createObject(resultSetFilesDBFrom);
                 if (fileDAO.findById(storageDBTo, file.getId()) != null)
                     throw new Exception("Storage id " + storageDBTo.getId() + " can't contains the same files id " + file.getId());
                 checkLimitation(storageDBTo, file);
+
                 filesStorageFrom.add(transferFile(storageDBFrom, storageDBTo, file.getId()));
+                //transferFile(storageDBFrom,storageDBTo,file.getId());
             }
 
             connection.commit();

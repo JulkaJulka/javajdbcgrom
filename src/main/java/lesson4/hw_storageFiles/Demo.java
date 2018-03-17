@@ -9,9 +9,9 @@ public class Demo {
     public static void main(String[] args) throws Exception {
         FileDAO fileDAO = new FileDAO();
         File file2 = new File(1846656661860262572l,"Test2","txt", 230l, 122l );
-        File file3 = new File(2443242634812634234l,"Test26","sss", 111l, 0l );
+        File file3 = new File(8073459684986963155l,"Test26","txt", 111l, 0l );
         File file4 = new File(1846656661860262572l,"Test2","xml", 100l, 101l );
-        File file6 = new File(2894972153822915406l,"Test4444","xml", 120l, 0l );
+        File file6 = new File(5442761823368985217l,"Test4444","xml", 120l, 0l );
         File file7 = new File(5926747254620248688l,"Transfer5","xml",10,0l);
         File file5 = new File("Terrr","txt", 100l, 0l );
         File[] files = {file2, file3, file4, file5};
@@ -37,7 +37,7 @@ public class Demo {
        // storageDAO.deleteStorage(133l);
         Controller controller = new Controller();
      //  System.out.println(fileDAO.save(file7));
-     System.out.println(controller.put(storage1,file7));
+   //  System.out.println(controller.put(storage2,file6));
        //System.out.println(controller.findById(storage2,8556355635284043560l));
    //  System.out.println(controller.transferFile(storage2, storage1,950097981352981114l));
 
@@ -45,6 +45,6 @@ public class Demo {
      //System.out.println(controller.transferAll(storage2, storage1));
 
      // System.out.println(controller.transferFile( storage1,storage2, 6443883591460032763l));
-      //  System.out.println(controller.transferAll(storage14,storage13));
+        System.out.println(controller.transferAll(storage13,storage2));
     }
 }
