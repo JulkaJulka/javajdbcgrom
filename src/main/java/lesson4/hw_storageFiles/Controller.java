@@ -15,7 +15,7 @@ public class Controller {
 
 
     private FileDAO fileDAO = new FileDAO();
-   private StorageDAO storageDAO = new StorageDAO() ;
+    private StorageDAO storageDAO = new StorageDAO();
 
 
     public File put(Storage storage, File file) throws Exception {
@@ -34,13 +34,14 @@ public class Controller {
 
             if (foundFile == null) {
                 checkLimitation(foundStorage, file);
-                if (file.getStorageId() == 0){
+                if (file.getStorageId() == 0) {
                     file.setStorageId(storage.getId());
-                fileDAO.save(file);
-                foundStorage.setStorageSize(foundStorage.getStorageSize() + file.getSize());
-                storageDAO.update(foundStorage);
+                    fileDAO.save(file);
+                    foundStorage.setStorageSize(foundStorage.getStorageSize() + file.getSize());
+                    storageDAO.update(foundStorage);
                     connection.commit();
-                return file;}
+                    return file;
+                }
             }
 
             checkLimitation(foundStorage, foundFile);
@@ -79,7 +80,7 @@ public class Controller {
                 deleteFile.setStorageId(0);
                 fileDAO.update(deleteFile);
 
-                Storage storageFrom = (Storage) storageDAO.findById(storage.getId());
+                Storage storageFrom = storageDAO.findById(storage.getId());
                 storageFrom.setStorageSize(storageFrom.getStorageSize() - deleteFile.getSize());
                 storageDAO.update(storageFrom);
             } else {
@@ -96,7 +97,7 @@ public class Controller {
 
         Connection connection = getConnection();
         try {
-
+            connection.setAutoCommit(false);
             File transferFile = fileDAO.findById(storageFrom, id);
             if (transferFile == null)
                 throw new Exception("File with id " + id + " is not found in DB");
@@ -111,9 +112,13 @@ public class Controller {
             storageTo.setStorageSize(storageTo.getStorageSize() + transferFile.getSize());
             storageDAO.update(storageTo);
 
+            connection.commit();
+
             return transferFile;
+
         } catch (SQLException e) {
-            throw new SQLException("Something went wrong");
+            connection.rollback();
+            throw e;
         }
     }
 
@@ -127,7 +132,7 @@ public class Controller {
             connection.setAutoCommit(false);
 
             Storage storageDBFrom = storageDAO.findById(storageFrom.getId());
-            Storage storageDBTo =  storageDAO.findById(storageTo.getId());
+            Storage storageDBTo = storageDAO.findById(storageTo.getId());
 
             if (storageDBFrom == null)
                 throw new Exception("Storage id " + storageFrom.getId() + " is not found in DB");
