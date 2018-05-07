@@ -1,12 +1,7 @@
 package hibernate.lesson3;
 
-import lesson4.hw_storageFiles.FileDAO;
-
 import java.util.Date;
 
-/**
- * Created by user on 26.04.2018.
- */
 public class Demo {
     public static void main(String[] args) {
        RoomDAO roomDAO = new RoomDAO();

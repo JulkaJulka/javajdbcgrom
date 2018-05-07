@@ -7,9 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-/**
- * Created by user on 26.04.2018.
- */
+
 public class RoomDAO {
     private SessionFactory sessionFactory;
 
