@@ -8,20 +8,33 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 
-public class HotelDAO {
-    private SessionFactory sessionFactory;
+public class HotelDAO extends GeneralDao<Hotel> {
 
-    public Hotel save(Hotel hotel) throws HibernateException {
+    static {
+        setFindByIdHql(FIND_BY_ID_HOTEL);
+    }
 
+    @Override
+    public Hotel save(Hotel hotel) throws Exception {
         Transaction tr = null;
         try (Session session = createSessionFactory().openSession()) {
 
             tr = session.getTransaction();
             tr.begin();
 
-            session.save(hotel);
+            Query query = session.createQuery(FIND_EQUALS_HOTEL);
 
+            query.setParameter("NAME", hotel.getName());
+            query.setParameter("COUNTRY", hotel.getCountry());
+            query.setParameter("CITY", hotel.getCity());
+            query.setParameter("STREET", hotel.getStreet());
+
+            if (query.uniqueResult() != null)
+                return null;
+
+            session.save(hotel);
             tr.commit();
+
             return hotel;
 
         } catch (HibernateException e) {
@@ -31,80 +44,5 @@ public class HotelDAO {
             throw new HibernateException("Save is failed");
         }
 
-    }
-
-    public Hotel update(Hotel hotel) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            session.update(hotel);
-
-            tr.commit();
-            return hotel;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Update is failed");
-        }
-    }
-
-    public Hotel findById(Long id) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Query query = session.createQuery("from Hotel where ID = :ID ");
-            query.setParameter("ID", id);
-            Hotel hotel = (Hotel) query.getSingleResult();
-
-            tr.commit();
-            return hotel;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Something went wrong");
-        }
-    }
-
-    public Hotel delete(long id) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Hotel deleteHotel = findById(id);
-            session.delete(deleteHotel);
-
-            tr.commit();
-
-            return deleteHotel;
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Delete is failed");
-        }
-    }
-
-    public SessionFactory createSessionFactory() {
-
-        //singleton pattern
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
-        return sessionFactory;
     }
 }

@@ -8,16 +8,27 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 
-public class RoomDAO {
-    private SessionFactory sessionFactory;
+public class RoomDAO extends GeneralDao<Room> {
 
-    public Room save(Room room) throws HibernateException {
+    static {
+        setFindByIdHql(FIND_BY_ID_ROOM);
+    }
+
+    @Override
+    public Room save(Room room) throws Exception {
+        if (room.getHotel() == null)
+            throw new Exception("Room with ID " + room.getId() + " have to have Hotel");
 
         Transaction tr = null;
         try (Session session = createSessionFactory().openSession()) {
 
             tr = session.getTransaction();
             tr.begin();
+
+            HotelDAO hotelDAO = new HotelDAO();
+
+            if (hotelDAO.findById(room.getHotel().getId()) == null)
+                return null;
 
             session.save(room);
 
@@ -30,82 +41,6 @@ public class RoomDAO {
                 tr.rollback();
             throw new HibernateException("Save is failed");
         }
-
-    }
-
-    public Room update(Room room) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            session.update(room);
-
-            tr.commit();
-            return room;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Update is failed");
-        }
-    }
-
-    public Room findById(Long id) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Query query = session.createQuery("from Room where ROOM_ID = :ID ");
-            query.setParameter("ID", id);
-            Room room = (Room) query.getSingleResult();
-
-            tr.commit();
-            return room;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Something went wrong");
-        }
-    }
-
-    public Room delete(long id) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Room deleteRoom = findById(id);
-            session.delete(deleteRoom);
-
-            tr.commit();
-
-            return deleteRoom;
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Delete is failed");
-        }
-    }
-
-    public SessionFactory createSessionFactory() {
-
-        //singleton pattern
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
-        return sessionFactory;
     }
 }
 

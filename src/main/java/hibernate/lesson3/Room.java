@@ -33,20 +33,10 @@ public class Room {
         this.hotel = hotel;
     }
 
-    public Room(long id, int numberOFGuests, double price, int breakfastIncluded, int petsAllowed, Date dateAvailableFrom, Hotel hotel) {
-        this.id = id;
-        this.numberOFGuests = numberOFGuests;
-        this.price = price;
-        this.breakfastIncluded = breakfastIncluded;
-        this.petsAllowed = petsAllowed;
-        this.dateAvailableFrom = dateAvailableFrom;
-        this.hotel = hotel;
-    }
-
     @Id
     @SequenceGenerator(name = "RM_SEQ", sequenceName = "ROOM_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RM_SEQ")
-    @Column(name = "ROOM_ID")
+    @Column(name = "ID")
     public long getId() {
         return id;
     }
@@ -76,7 +66,7 @@ public class Room {
         return dateAvailableFrom;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "HOTEL_ID")
     public Hotel getHotel() {
         return hotel;
