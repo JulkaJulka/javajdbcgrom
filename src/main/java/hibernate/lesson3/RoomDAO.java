@@ -7,39 +7,9 @@ import org.hibernate.query.Query;
 
 public class RoomDAO extends GeneralDao<Room> {
 
-    static {
-        setFindByIdHql(FIND_BY_ID_ROOM);
-    }
-
-    @Override
-    public Room save(Room room) throws Exception {
-        if (room.getHotel() == null)
-            throw new Exception("Room with ID " + room.getId() + " have to have Hotel");
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            HotelDAO hotelDAO = new HotelDAO();
-            setFindByIdHql(FIND_BY_ID_HOTEL);
-
-            if (hotelDAO.findById(room.getHotel().getId()) == null){
-                return null;}
-
-            session.save(room);
-
-            tr.commit();
-            return room;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Save is failed");
-        }
-    }
+    public static final String FIND_RM_BY_ID_ROOM = "FROM Room WHERE ID = :ID ";
+    public static final String FIND_RMS_BY_HTID_HQL = "FROM Room WHERE HOTEL_ID = :HOTEL";
+    public static final String DELETE_BY_RMID_HQL = "DELETE FROM Room WHERE ID = :ID";
 
     public Room delete(long id) throws HibernateException {
 
@@ -49,8 +19,8 @@ public class RoomDAO extends GeneralDao<Room> {
             tr = session.getTransaction();
             tr.begin();
 
-            Room deleteEntity = findById(id);
-            if(deleteEntity == null)
+            Room deleteEntity = findById(FIND_RM_BY_ID_ROOM, id);
+            if (deleteEntity == null)
                 return null;
             Query query = session.createQuery(DELETE_BY_RMID_HQL);
             query.setParameter("ID", id);
@@ -58,7 +28,8 @@ public class RoomDAO extends GeneralDao<Room> {
 
             tr.commit();
 
-            return deleteEntity;
+           return deleteEntity;
+
         } catch (HibernateException e) {
             System.err.println(e.getMessage());
             if (tr != null)
@@ -66,6 +37,5 @@ public class RoomDAO extends GeneralDao<Room> {
             throw new HibernateException("Delete is failed");
         }
     }
-
 }
 

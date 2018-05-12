@@ -7,44 +7,14 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
+import static hibernate.lesson3.RoomDAO.DELETE_BY_RMID_HQL;
+import static hibernate.lesson3.RoomDAO.FIND_RMS_BY_HTID_HQL;
+
 
 public class HotelDAO extends GeneralDao<Hotel> {
 
-    static {
-        setFindByIdHql(FIND_BY_ID_HOTEL);
-    }
-
-    @Override
-    public Hotel save(Hotel hotel) throws Exception {
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Query query = session.createQuery(FIND_EQUALS_HOTEL);
-
-            query.setParameter("NAME", hotel.getName());
-            query.setParameter("COUNTRY", hotel.getCountry());
-            query.setParameter("CITY", hotel.getCity());
-            query.setParameter("STREET", hotel.getStreet());
-
-            if (query.uniqueResult() != null)
-                return null;
-
-            session.save(hotel);
-            tr.commit();
-
-            return hotel;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Save is failed");
-        }
-
-    }
+    public static final String FIND_HT_BY_ID_HOTEL = "FROM Hotel WHERE ID = :ID ";
+    public static final String DELETE_HT_BY_HTID_HQL = "DELETE FROM Hotel WHERE ID = :ID";
 
     public Hotel delete(long id) throws HibernateException {
 
@@ -54,7 +24,7 @@ public class HotelDAO extends GeneralDao<Hotel> {
             tr = session.getTransaction();
             tr.begin();
 
-            Hotel deleteEntity = findById(id);
+            Hotel deleteEntity = findById(FIND_HT_BY_ID_HOTEL, id);
 
             if (deleteEntity == null)
                 return null;
@@ -75,6 +45,7 @@ public class HotelDAO extends GeneralDao<Hotel> {
             tr.commit();
 
             return deleteEntity;
+
         } catch (HibernateException e) {
             System.err.println(e.getMessage());
             if (tr != null)
