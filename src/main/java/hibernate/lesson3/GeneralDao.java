@@ -13,11 +13,6 @@ import org.hibernate.query.Query;
 public abstract class GeneralDao<T> {
 
     private SessionFactory sessionFactory;
-    public static String findByIdHql = "";
-
-    public static void setFindByIdHql(String findByIdHql) {
-        GeneralDao.findByIdHql = findByIdHql;
-    }
 
     public abstract T delete(long id);
 
