@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <!-- a SessionFactory instance listed as /jndi/name -->
+    <session-factory>
+
+        <!-- properties -->
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.url">
+            jdbc:oracle:thin:@solnalarmlessons.caixfggxri5y.us-east-2.rds.amazonaws.com:1521:ORCL
+        </property>
+        <property name="hibernate.connection.username">sysadmin</property>
+        <property name="hibernate.connection.password">sysadmin</property>
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+
+        <!-- mapping files -->
+        <mapping class="hibernate.lesson1.Product"/>
+        <mapping class="hibernate.lesson3.Hotel"/>
+        <mapping class="hibernate.lesson3.Room"/>
+
+
+    </session-factory>
+
+</hibernate-configuration>
