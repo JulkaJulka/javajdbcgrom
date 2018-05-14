@@ -23,9 +23,6 @@ public class GeneralDao<T> {
 
             T deleteEntity = findById(hqlDelEntity.substring(7,hqlDelEntity.length()), id);
 
-            if (deleteEntity == null)
-                return null;
-
             Query queryDelHt = session.createQuery(hqlDelEntity);
             queryDelHt.setParameter("ID", id);
             queryDelHt.executeUpdate();
