@@ -10,23 +10,23 @@ import org.hibernate.query.Query;
 /**
  * Created by user on 08.05.2018.
  */
-public abstract class GeneralDao<T> {
+public class GeneralDao<T> {
 
     private SessionFactory sessionFactory;
 
-    public T delete(String hqlFindDelEntity, long id){
+    public T delete(String hqlDelEntity, long id){
         Transaction tr = null;
         try (Session session = createSessionFactory().openSession()) {
 
             tr = session.getTransaction();
             tr.begin();
 
-            T deleteEntity = findById(hqlFindDelEntity, id);
+            T deleteEntity = findById(hqlDelEntity.substring(7,hqlDelEntity.length()), id);
 
             if (deleteEntity == null)
                 return null;
 
-            Query queryDelHt = session.createQuery("DELETE " + hqlFindDelEntity);
+            Query queryDelHt = session.createQuery(hqlDelEntity);
             queryDelHt.setParameter("ID", id);
             queryDelHt.executeUpdate();
 

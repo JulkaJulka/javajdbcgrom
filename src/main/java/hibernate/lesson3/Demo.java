@@ -2,6 +2,8 @@ package hibernate.lesson3;
 
 import java.util.Date;
 
+import static hibernate.lesson3.RoomDAO.DELETE_RM_BY_ID_ROOM;
+
 public class Demo {
     public static void main(String[] args) throws Exception {
      //  RoomDAO roomDAO = new RoomDAO();
@@ -9,11 +11,11 @@ public class Demo {
 
         Hotel hotel1 = new Hotel("Rixosh", "Ukraine", "Antalia","Central 30");
         Hotel hotel2 = new Hotel("saveGeneralLebidddU", "Ukraine", "Antalia","Central 50");
-       hotel2.setId(97l);
+       hotel2.setId(81l);
      //  System.out.println(hotelDAO.findById(89l));
        // hotel1.setId(11);
       //  System.out.println(hotel1);
-      // System.out.println(hotelDAO.delete(97l));
+      // System.out.println(hotelDAO.delete(hotelDAO.FIND_HT_BY_ID_HOTEL,105l));
      //  System.out.println(hotelDAO.findById(FIND_HT_BY_ID_HOTEL,97l));
     //    System.out.println(hotelDAO.save(hotel2));
       //  System.out.println(hotelDAO.findByIdRms(95l));
@@ -25,15 +27,15 @@ public class Demo {
         RoomDAO roomDAO = new RoomDAO();
         //System. x out.println(hotelDAO.findRmsByHotelId(100l));
        // System.out.println(hotelDAO.findById(95l));
-       //System.out.println(roomDAO.save(room1));
+    //   System.out.println(roomDAO.save(room1));
     //  System.out.println(roomDAO.findById(FIND_RM_BY_ID_ROOM,23l));
        // System.out.println(roomDAO.update(room1));
        // System.out.println(hotelDAO.save(hotel2));
      //   System.out.println(hotelDAO.findById(95l));
         //System.out.println(hotelDAO.findById(91l));
        // System.out.println(hotelDAO.update(hotel1));
-     System.out.println(roomDAO.delete2(roomDAO.FIND_RM_BY_ID_ROOM,23l));
-      //  System.out.println(roomDAO.delete(7));
+    // System.out.println(roomDAO.delete2(roomDAO.FIND_RM_BY_ID_ROOM,23l));
+       System.out.println(roomDAO.delete(DELETE_RM_BY_ID_ROOM,191l));
        // System.out.println(roomDAO.delete(9));
        // System.out.println(roomDAO.delete(11));
        // System.out.println(roomDAO.delete(1));
