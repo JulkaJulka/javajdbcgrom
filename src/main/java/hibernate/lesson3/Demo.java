@@ -13,7 +13,7 @@ public class Demo {
      //  System.out.println(hotelDAO.findById(89l));
        // hotel1.setId(11);
       //  System.out.println(hotel1);
-       System.out.println(hotelDAO.delete(97l));
+      // System.out.println(hotelDAO.delete(97l));
      //  System.out.println(hotelDAO.findById(FIND_HT_BY_ID_HOTEL,97l));
     //    System.out.println(hotelDAO.save(hotel2));
       //  System.out.println(hotelDAO.findByIdRms(95l));
@@ -32,7 +32,7 @@ public class Demo {
      //   System.out.println(hotelDAO.findById(95l));
         //System.out.println(hotelDAO.findById(91l));
        // System.out.println(hotelDAO.update(hotel1));
-     // System.out.println(roomDAO.delete2(145l));
+     System.out.println(roomDAO.delete2(roomDAO.FIND_RM_BY_ID_ROOM,23l));
       //  System.out.println(roomDAO.delete(7));
        // System.out.println(roomDAO.delete(9));
        // System.out.println(roomDAO.delete(11));

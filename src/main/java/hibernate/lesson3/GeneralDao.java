@@ -14,7 +14,33 @@ public abstract class GeneralDao<T> {
 
     private SessionFactory sessionFactory;
 
-    public abstract T delete(long id);
+    public T delete(String hqlFindDelEntity, long id){
+        Transaction tr = null;
+        try (Session session = createSessionFactory().openSession()) {
+
+            tr = session.getTransaction();
+            tr.begin();
+
+            T deleteEntity = findById(hqlFindDelEntity, id);
+
+            if (deleteEntity == null)
+                return null;
+
+            Query queryDelHt = session.createQuery("DELETE " + hqlFindDelEntity);
+            queryDelHt.setParameter("ID", id);
+            queryDelHt.executeUpdate();
+
+            tr.commit();
+
+            return deleteEntity;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            if (tr != null)
+                tr.rollback();
+            throw new HibernateException("Delete is failed");
+        }
+    }
 
     public T save(T t) throws Exception {
 

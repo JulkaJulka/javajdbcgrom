@@ -16,35 +16,6 @@ public class HotelDAO extends GeneralDao<Hotel> {
     public static final String FIND_HT_BY_ID_HOTEL = "FROM Hotel WHERE ID = :ID ";
     public static final String DELETE_HT_BY_HTID_HQL = "DELETE FROM Hotel WHERE ID = :ID";
 
-    public Hotel delete(long id) throws HibernateException {
-
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            Hotel deleteEntity = findById(FIND_HT_BY_ID_HOTEL, id);
-
-            if (deleteEntity == null)
-                return null;
-
-            Query queryDelHt = session.createQuery(DELETE_HT_BY_HTID_HQL);
-            queryDelHt.setParameter("ID", id);
-            queryDelHt.executeUpdate();
-
-            tr.commit();
-
-            return deleteEntity;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Delete is failed");
-        }
-    }
-
     public List<Room> findRmsByHotelId(Long hotelId) throws HibernateException {
         try (Session session = createSessionFactory().openSession()) {
 
