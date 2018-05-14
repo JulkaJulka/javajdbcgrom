@@ -29,15 +29,6 @@ public class HotelDAO extends GeneralDao<Hotel> {
             if (deleteEntity == null)
                 return null;
 
-            List<Room> deleteRms = findRmsByHotelId(id);
-            if (deleteRms.size() != 0) {
-
-                for (Room rm : deleteRms) {
-                    Query queryDelRms = session.createQuery(DELETE_BY_RMID_HQL);
-                    queryDelRms.setParameter("ID", rm.getId());
-                    queryDelRms.executeUpdate();
-                }
-            }
             Query queryDelHt = session.createQuery(DELETE_HT_BY_HTID_HQL);
             queryDelHt.setParameter("ID", id);
             queryDelHt.executeUpdate();

@@ -9,11 +9,11 @@ public class Demo {
 
         Hotel hotel1 = new Hotel("Rixosh", "Ukraine", "Antalia","Central 30");
         Hotel hotel2 = new Hotel("saveGeneralLebidddU", "Ukraine", "Antalia","Central 50");
-       hotel2.setId(143l);
+       hotel2.setId(97l);
      //  System.out.println(hotelDAO.findById(89l));
        // hotel1.setId(11);
       //  System.out.println(hotel1);
-        System.out.println(hotelDAO.delete(145l));
+       System.out.println(hotelDAO.delete(97l));
      //  System.out.println(hotelDAO.findById(FIND_HT_BY_ID_HOTEL,97l));
     //    System.out.println(hotelDAO.save(hotel2));
       //  System.out.println(hotelDAO.findByIdRms(95l));
@@ -25,7 +25,7 @@ public class Demo {
         RoomDAO roomDAO = new RoomDAO();
         //System. x out.println(hotelDAO.findRmsByHotelId(100l));
        // System.out.println(hotelDAO.findById(95l));
-      // System.out.println(roomDAO.save(room1));
+       //System.out.println(roomDAO.save(room1));
     //  System.out.println(roomDAO.findById(FIND_RM_BY_ID_ROOM,23l));
        // System.out.println(roomDAO.update(room1));
        // System.out.println(hotelDAO.save(hotel2));
