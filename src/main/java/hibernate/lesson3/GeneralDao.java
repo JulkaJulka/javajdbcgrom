@@ -14,14 +14,14 @@ public class GeneralDao<T> {
 
     private SessionFactory sessionFactory;
 
-    public T delete(String hqlDelEntity, long id){
+    public T delete(String hqlFindEntity, String hqlDelEntity, long id){
         Transaction tr = null;
         try (Session session = createSessionFactory().openSession()) {
 
             tr = session.getTransaction();
             tr.begin();
 
-            T deleteEntity = findById(hqlDelEntity.substring(7,hqlDelEntity.length()), id);
+            T deleteEntity = findById(hqlFindEntity, id);
 
             Query queryDelHt = session.createQuery(hqlDelEntity);
             queryDelHt.setParameter("ID", id);

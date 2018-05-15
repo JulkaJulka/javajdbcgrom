@@ -11,18 +11,18 @@ public class Demo {
 
         Hotel hotel1 = new Hotel("Rixosh", "Ukraine", "Antalia","Central 30");
         Hotel hotel2 = new Hotel("saveGeneralLebidddU", "Ukraine", "Antalia","Central 50");
-       hotel2.setId(181l);
+       hotel2.setId(105l);
      //  System.out.println(hotelDAO.findById(89l));
        // hotel1.setId(11);
       //  System.out.println(hotel1);
-      // System.out.println(hotelDAO.delete(hotelDAO.FIND_HT_BY_ID_HOTEL,105l));
+       System.out.println(hotelDAO.delete(105l));
      //  System.out.println(hotelDAO.findById(FIND_HT_BY_ID_HOTEL,97l));
     //    System.out.println(hotelDAO.save(hotel2));
       //  System.out.println(hotelDAO.findByIdRms(95l));
        // HotelDAO hotelDAO1 = new HotelDAO();
       // System.out.println(hotelDAO.save(hotel2));
         Room room1 = new Room(2,2000.0,0,1,new Date(),hotel2);
-        room1.setId(103l);
+        room1.setId(195l);
        // System.out.println(room1);
         RoomDAO roomDAO = new RoomDAO();
         //System. x out.println(hotelDAO.findRmsByHotelId(100l));
@@ -34,7 +34,7 @@ public class Demo {
      //  System.out.println(hotelDAO.findById(95l));
         //System.out.println(hotelDAO.findById(91l));
        // System.out.println(hotelDAO.update(hotel1));
-   //  System.out.println(roomDAO.delete(25l));
+    System.out.println(roomDAO.delete(195l));
        //System.out.println(roomDAO.delete(191l));
        // System.out.println(roomDAO.delete(9));
        // System.out.println(roomDAO.delete(11));

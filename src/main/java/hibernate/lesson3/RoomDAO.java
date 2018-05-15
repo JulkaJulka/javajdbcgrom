@@ -8,7 +8,7 @@ public class RoomDAO extends GeneralDao<Room> {
     public static final String DELETE_RM_BY_ID_ROOM = "DELETE FROM Room WHERE ID = :ID ";
 
     public Room delete(long id){
-                 return delete(DELETE_RM_BY_ID_ROOM, id);
+                 return delete(FIND_RM_BY_ID_ROOM,DELETE_RM_BY_ID_ROOM, id);
     }
 
     public Room findById( long id) throws HibernateException {
