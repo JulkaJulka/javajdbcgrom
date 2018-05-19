@@ -71,7 +71,6 @@ public class User {
     }
 
     @Enumerated(EnumType.STRING)
-   // @Column(length = 5)
     @Column(name = "USER_TYPE")
     public UserType getUserType() {
         return userType;
@@ -87,7 +86,6 @@ public class User {
 
 
     @OneToMany(targetEntity=Order.class, mappedBy = "user", fetch = FetchType.LAZY)
-    //@JoinColumn(name="ID")
     public List<Order> getOrders() {
         return orders;
     }

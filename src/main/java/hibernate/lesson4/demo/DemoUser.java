@@ -21,7 +21,9 @@ public class DemoUser {
        // System.out.println(userR);
       //  UserRepository userRepository = new UserRepository();
         List<Order> orders = new LinkedList<>();
-        User user2 = new User("fff","fff","Ukr",UserType.ADMIN,true);
+        Order order = new Order(null,null,null,null,0.60d);
+        orders.add(order);
+        User user2 = new User("fff","fff","Ukr",UserType.ADMIN,true,orders);
         User user1 = new User("Julia","qwerty", "Ukraine", UserType.ADMIN, true);
         System.out.println(userRepository.save(user2));
       /*  User user2 = new User(1001,"Test","qwerty", "Ukraine", UserType.ADMIN);

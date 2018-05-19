@@ -25,6 +25,8 @@ public class DemoHotel {
       // user1.setUserType(UserType.ADMIN);
         Hotel hotel1 = new Hotel("Riviera", "Belarus", "Minsk2", "Test2");
         List rooms = new LinkedList<>();
+        Room room = new Room(2,3d,true,true,null,null);
+        rooms.add(room);
         Hotel hotel3 = new Hotel( "jkl","FFFFFF", "Thailand", "Phuket",rooms);
         System.out.println(hotelRepository.save(hotel3));
 
