@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by user on 30.11.2017.
  */
 @Entity
-@Table(name = "ORDER_BK")
+@Table(name = "ORDERS_BK")
 public class Order {
     private long id;
     private User user;

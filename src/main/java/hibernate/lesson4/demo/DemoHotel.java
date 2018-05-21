@@ -28,8 +28,8 @@ public class DemoHotel {
         Room room = new Room(2,3d,true,true,null,null);
       //  rooms.add(room);
         Hotel hotel3 = new Hotel( "jkl","FFFFFF", "Thailand", "Phuket");
-        //hotelRepository.findEntityById(FIND_HT_BY_ID_HOTEL, 123l);
-       System.out.println(hotelRepository.save(hotel3));
+        hotelRepository.findEntityById(FIND_HT_BY_ID_HOTEL, 123l);
+      // System.out.println(hotelRepository.save(hotel3));
 
     }
 }
