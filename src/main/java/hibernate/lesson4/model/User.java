@@ -85,8 +85,6 @@ public class User {
         return loginStatus;
     }
 
-
-
     @OneToMany(targetEntity=Order.class, mappedBy = "user", fetch = FetchType.LAZY)
     public List<Order> getOrders() {
         return orders;
@@ -133,7 +131,6 @@ public class User {
                 ", orders=" + orders +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object o) {

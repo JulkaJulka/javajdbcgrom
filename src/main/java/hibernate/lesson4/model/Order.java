@@ -49,13 +49,13 @@ public class Order {
         return room;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "ORDER_DATE_FROM")
     public Date getDateFrom() {
         return dateFrom;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "ORDER_DATE_TO")
     public Date getDateTo() {
         return dateTo;
@@ -92,14 +92,43 @@ public class Order {
 
     @Override
     public String toString() {
-        String strDateFrom = "20-09-2017";
-        String strDateTo = "23-09-2017";
-        return id +
-                "," + user.getId() +
-                "," + room.getId() +
-                "," + strDateFrom +
-                "," + strDateTo +
-                "," + room.getPrice()*3 ;
+        return "Order{" +
+                "id=" + id +
+                ", user=" + user +
+                ", room=" + room +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", moneyPaid=" + moneyPaid +
+                '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (id != order.id) return false;
+        if (Double.compare(order.moneyPaid, moneyPaid) != 0) return false;
+        if (user != null ? !user.equals(order.user) : order.user != null) return false;
+        if (room != null ? !room.equals(order.room) : order.room != null) return false;
+        if (dateFrom != null ? !dateFrom.equals(order.dateFrom) : order.dateFrom != null) return false;
+        return dateTo != null ? dateTo.equals(order.dateTo) : order.dateTo == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (room != null ? room.hashCode() : 0);
+        result = 31 * result + (dateFrom != null ? dateFrom.hashCode() : 0);
+        result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
+        temp = Double.doubleToLongBits(moneyPaid);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
