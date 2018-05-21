@@ -49,11 +49,13 @@ public class Order {
         return room;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ORDER_DATE_FROM")
     public Date getDateFrom() {
         return dateFrom;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ORDER_DATE_TO")
     public Date getDateTo() {
         return dateTo;

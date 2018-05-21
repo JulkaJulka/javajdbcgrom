@@ -1,6 +1,8 @@
 package hibernate.lesson4.model;
 
+import com.sun.istack.internal.NotNull;
 import hibernate.lesson4.repository.GeneralRepository;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.text.DateFormat;
@@ -53,16 +55,22 @@ public class Room {
         return price;
     }
 
-    @Column(name = "BREAKFAST_INCLUDED")
+
+    @NotNull
+    @Column(name = "BREAKFAST_INCLUDED", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     public boolean getBreakfastIncluded() {
         return breakfastIncluded;
     }
 
-    @Column(name = "PETS_ALLOWED")
+    @NotNull
+    @Column(name = "PETS_ALLOWED", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     public boolean getPetsAllowed() {
         return petsAllowed;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "DATE_AVAILABLE_FROM")
     public Date getDateAvailableFrom() {
         return dateAvailableFrom;

@@ -12,7 +12,8 @@ import static hibernate.lesson4.Utils.*;
 
 
 public class RoomRepository extends GeneralRepository {
-
+    public static final String FIND_RM_BY_ID_ROOM = "FROM Room WHERE ID = :ID ";
+    public static final String DELETE_RM_BY_ID_ROOM = "DELETE FROM Room WHERE ID = :ID ";
     /*static {
         setPathDB("D:/Ubuntu_backup/dev/RoomDB");
     }*/

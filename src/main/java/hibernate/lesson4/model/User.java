@@ -3,6 +3,7 @@ package hibernate.lesson4.model;
 import com.sun.istack.internal.NotNull;
 import hibernate.lesson4.repository.GeneralRepository;
 import org.hibernate.annotations.Type;
+import org.hibernate.type.NumericBooleanType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -77,12 +78,13 @@ public class User {
     }
 
 
-    @Type(type = "true_false")
     @NotNull
     @Column(name = "LOGIN_STATUS", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     public boolean isLoginStatus() {
         return loginStatus;
     }
+
 
 
     @OneToMany(targetEntity=Order.class, mappedBy = "user", fetch = FetchType.LAZY)
@@ -132,6 +134,7 @@ public class User {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -141,21 +144,23 @@ public class User {
 
         if (id != user.id) return false;
         if (loginStatus != user.loginStatus) return false;
-        if (!userName.equals(user.userName)) return false;
-        if (!password.equals(user.password)) return false;
-        if (!country.equals(user.country)) return false;
-        return userType == user.userType;
+        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (country != null ? !country.equals(user.country) : user.country != null) return false;
+        if (userType != user.userType) return false;
+        return orders != null ? orders.equals(user.orders) : user.orders == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + userName.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + country.hashCode();
-        result = 31 * result + userType.hashCode();
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (userType != null ? userType.hashCode() : 0);
         result = 31 * result + (loginStatus ? 1 : 0);
+        result = 31 * result + (orders != null ? orders.hashCode() : 0);
         return result;
     }
 }

@@ -25,13 +25,14 @@ public class DemoRoom {
         Hotel hotel1 = new Hotel( "Schastie", "Ukraine", "Lviv", "Test");
         Hotel hotel2 = new Hotel( "Schastie", "Ukraine", "Lviv", "Test");
         hotel2.setId(221l);
-        Room room1 = new Room( 2, 1800.00d, true, false, date, hotel2);
+        Room room1 = new Room( 2, 1800.00d, true, false, date, null);
+        room1.setId(102l);
         Room room3 = new Room( 2, 1800d, true, false, date, hotel2);
         Room room2 = new Room( 2, 1800.00, true, false, dateF, hotel2);
         Room room4 = new Room( -12, 1800.00, true, false, dateF, hotel2);
-        room4.setId(-78l);
+       // room4.setId(-78l);
         Filter filter = new Filter(2, 1000d, true, false, dateF, "Ukraine", "Rovno");
-        System.out.println(roomRepository.save(room1));
+        System.out.println(roomRepository.findEntityById(RoomRepository.FIND_RM_BY_ID_ROOM,102l));
       //  RoomService roomService = new RoomService();
      //   roomService.deleteRoom(333l,user1);
     //  roomRepository.deleteEntity(6844416740395250473l);

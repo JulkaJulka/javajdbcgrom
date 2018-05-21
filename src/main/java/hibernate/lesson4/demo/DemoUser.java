@@ -25,7 +25,7 @@ public class DemoUser {
         orders.add(order);
         User user2 = new User("fff","fff","Ukr",UserType.ADMIN,true,orders);
         User user1 = new User("Julia","qwerty", "Ukraine", UserType.ADMIN, true);
-        System.out.println(userRepository.save(user2));
+        userRepository.save(user2);
       /*  User user2 = new User(1001,"Test","qwerty", "Ukraine", UserType.ADMIN);
         User user3 = new User(1001,"Test2","qwerty", "Ukraine", UserType.USER);
         User user4 = new User(1001,"Test3","qwerty", "Ukraine", UserType.USER);
