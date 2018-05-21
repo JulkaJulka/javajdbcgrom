@@ -1,32 +1,30 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-
 <hibernate-configuration>
-
-    <!-- a SessionFactory instance listed as /jndi/name -->
     <session-factory>
-
-        <!-- properties -->
         <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-        <property name="hibernate.connection.url">
-            jdbc:oracle:thin:@solnalarmlessons.caixfggxri5y.us-east-2.rds.amazonaws.com:1521:ORCL
-        </property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@solnalarmlessons.caixfggxri5y.us-east-2.rds.amazonaws.com:1521:ORCL</property>
         <property name="hibernate.connection.username">sysadmin</property>
         <property name="hibernate.connection.password">sysadmin</property>
-        <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
-        <!-- mapping files -->
-        <mapping class="hibernate.lesson1.Product"/>
-        <mapping class="hibernate.lesson3.Hotel"/>
-        <mapping class="hibernate.lesson3.Room"/>
-        <mapping class="hibernate.lesson4.model.Room"/>
-        <mapping class="hibernate.lesson4.model.Hotel"/>
-        <mapping class="hibernate.lesson4.model.User"/>
-        <mapping class="hibernate.lesson4.model.Order"/>
-
-
+        <!--<property name="show_sql">true</property>-->
+        <mapping class="hibernate.lesson1.Product"></mapping>
+        <mapping class="hibernate.lesson4.model.Hotel"></mapping>
+        <mapping class="hibernate.lesson4.model.Room"></mapping>
+        <mapping class="hibernate.lesson4.model.Order"></mapping>
+        <mapping class="hibernate.lesson4.model.User"></mapping>
+        <mapping class="hibernate.lesson4.model.UserType"></mapping>
+        <!--<mapping class="hibernate_dz.dz_lesson3.Hotel"></mapping>
+        <mapping class="hibernate_dz.dz_lesson3.Room"></mapping>-->
+      <!--  <mapping class="hibernate_dz.dz_lesson4.model.User"></mapping>
+        <mapping class="hibernate_dz.dz_lesson4.model.Hotel"></mapping>
+        <mapping class="hibernate_dz.dz_lesson4.model.Room"></mapping>
+        <mapping class="hibernate_dz.dz_lesson4.model.Order"></mapping>
+        <!-<mapping class="hibernate_dz.dz_lesson1.Product"></mapping>-->
+        <!--<mapping class="hibernate.lesson2.Product"></mapping>-->
     </session-factory>
 
+    <!--<open_tag params>value</open_tag>-->
 </hibernate-configuration>
