@@ -23,21 +23,6 @@ private long id;
     public Hotel() {
     }
 
-    public Hotel(String name, String country, String city, String street) {
-        this.name = name;
-        this.country = country;
-        this.city = city;
-        this.street = street;
-    }
-
-    public Hotel(String name, String country, String city, String street, List rooms) {
-        this.name = name;
-        this.country = country;
-        this.city = city;
-        this.street = street;
-        this.rooms = rooms;
-    }
-
     @Id
     @SequenceGenerator(name = "HT_SEQ", sequenceName = "HOTEL_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HT_SEQ")
@@ -74,9 +59,6 @@ private long id;
     public void setRooms(List rooms) {
         this.rooms = rooms;
     }
-
-
-
 
 
     public void setId(long id) {

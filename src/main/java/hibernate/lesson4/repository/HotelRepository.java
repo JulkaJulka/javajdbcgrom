@@ -17,7 +17,6 @@ public class HotelRepository extends GeneralRepository<Hotel> {
     public static final String FIND_HT_BY_ID_HOTEL = "FROM Hotel WHERE ID = :ID ";
     public static final String DELETE_HT_BY_ID_HOTEL = "DELETE FROM Hotel WHERE ID = :ID";
 
-    private final String pathHotelDB = "D:/Ubuntu_backup/dev/HotelDB";
 
   /*  static {
         setPathDB("D:/Ubuntu_backup/dev/HotelDB");

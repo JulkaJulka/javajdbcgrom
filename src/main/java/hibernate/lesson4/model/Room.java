@@ -28,15 +28,6 @@ public class Room {
     public Room() {
     }
 
-    public Room(int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
-        this.numberOfGuests = numberOfGuests;
-        this.price = price;
-        this.breakfastIncluded = breakfastIncluded;
-        this.petsAllowed = petsAllowed;
-        this.dateAvailableFrom = dateAvailableFrom;
-        this.hotel = hotel;
-    }
-
     @Id
     @SequenceGenerator(name = "RM_SEQ", sequenceName = "ROOM_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RM_SEQ")

@@ -14,9 +14,8 @@ import static hibernate.lesson4.Utils.*;
  */
 public class OrderRepository extends GeneralRepository {
 
-   /* static {
-        setPathDB("D:/Ubuntu_backup/dev/OrderDB.txt");
-    }*/
+    public static final String FIND_OR_BY_ID_OR = "FROM Order WHERE ID = :ID ";
+    public static final String DELETE_OR_BY_ID_OR = "DELETE FROM Order WHERE ID = :ID ";
 
     /*public void bookRoom(long roomId, long userId, long hotelId) throws Exception {
         String[] str = new String[]{generateId().toString(), String.valueOf(userId), String.valueOf(roomId), "10-09-2017", "23-09-2017",

@@ -16,19 +16,15 @@ import java.util.Set;
 public class DemoHotel {
     public static void main(String[] args) throws Exception {
         HotelRepository hotelRepository = new HotelRepository();
-        //System.out.println(hotelRepository.findEntityById(HotelRepository.FIND_HT_BY_ID_HOTEL,83l));
-        //System.out.println( hotelRepository.findHotelByName("Riviera"));
-       // System.out.println("-----");
-        //System.out.println( hotelRepository.findHotelByCity("Kiev"));
-       // Set<Order> orders = new HashSet<Order>();
-       // User user1 = new User("Oleg", "poiuyt", "Ukraine", UserType.USER, true, orders);
-      // user1.setUserType(UserType.ADMIN);
-        Hotel hotel1 = new Hotel("Riviera", "Belarus", "Minsk2", "Test2");
+
+        Hotel hotel1 = new Hotel();
+        hotel1.setName("Schac");
+        hotel1.setCountry("Country");
+        hotel1.setCity("Lviv");
+        hotel1.setStreet("Crntal");
         List rooms = new LinkedList<>();
-        Room room = new Room(2,3d,true,true,null,null);
-      //  rooms.add(room);
-        Hotel hotel3 = new Hotel( "jkl","FFFFFF", "Thailand", "Phuket");
-        hotelRepository.findEntityById(FIND_HT_BY_ID_HOTEL, 123l);
+
+        hotelRepository.findById(FIND_HT_BY_ID_HOTEL, 123l);
       // System.out.println(hotelRepository.save(hotel3));
 
     }

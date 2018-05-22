@@ -2,10 +2,13 @@ package hibernate.lesson4.model;
 
 import com.sun.istack.internal.NotNull;
 import hibernate.lesson4.repository.GeneralRepository;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.hibernate.type.NumericBooleanType;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
 
@@ -23,29 +26,11 @@ public class User {
     private String password;
     private String country;
     private UserType userType;
-    private boolean loginStatus;
 
     private List<Order> orders;
 
 
     public User() {
-    }
-
-    public User(String userName, String password, String country, UserType userType, boolean loginStatus) {
-        this.userName = userName;
-        this.password = password;
-        this.country = country;
-        this.userType = userType;
-        this.loginStatus = loginStatus;
-    }
-
-    public User(String userName, String password, String country, UserType userType, boolean loginStatus, List<Order> orders) {
-        this.userName = userName;
-        this.password = password;
-        this.country = country;
-        this.userType = userType;
-        this.loginStatus = loginStatus;
-        this.orders = orders;
     }
 
     @Id
@@ -77,19 +62,10 @@ public class User {
         return userType;
     }
 
-
-    @NotNull
-    @Column(name = "LOGIN_STATUS", nullable = false)
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    public boolean isLoginStatus() {
-        return loginStatus;
-    }
-
-    @OneToMany(targetEntity=Order.class, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Order.class, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Order> getOrders() {
         return orders;
     }
-
 
     public void setId(long id) {
         this.id = id;
@@ -111,10 +87,6 @@ public class User {
         this.userType = userType;
     }
 
-    public void setLoginStatus(boolean loginStatus) {
-        this.loginStatus = loginStatus;
-    }
-
     public void ListOrders(List<Order> orders) {
         this.orders = orders;
     }
@@ -127,7 +99,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", country='" + country + '\'' +
                 ", userType=" + userType +
-                ", loginStatus=" + loginStatus +
                 ", orders=" + orders +
                 '}';
     }
@@ -140,7 +111,6 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (loginStatus != user.loginStatus) return false;
         if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (country != null ? !country.equals(user.country) : user.country != null) return false;
@@ -156,7 +126,6 @@ public class User {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (userType != null ? userType.hashCode() : 0);
-        result = 31 * result + (loginStatus ? 1 : 0);
         result = 31 * result + (orders != null ? orders.hashCode() : 0);
         return result;
     }

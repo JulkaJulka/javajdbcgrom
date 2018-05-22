@@ -19,18 +19,98 @@ public abstract class GeneralRepository<T> {
 
     private SessionFactory sessionFactory;
 
-    public static String pathDB = "";
-    public static int countFieldsOfObject;
+    public T save(T t) throws Exception {
 
-   /* public static void setPathDB(String pathDB) {
+        Transaction tr = null;
+        try (Session session = createSessionFactory().openSession()) {
 
-        GeneralRepository.pathDB = pathDB;
-    }*/
+            tr = session.getTransaction();
+            tr.begin();
 
-    public static void setCountFieldsOfObject(int countFieldsOfObject) {
-        GeneralRepository.countFieldsOfObject = countFieldsOfObject;
+            session.save(t);
+
+            tr.commit();
+            return t;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            if (tr != null)
+                tr.rollback();
+            throw new HibernateException("Save is failed");
+        }
+    }
+    public T update(T t) throws HibernateException {
+
+        Transaction tr = null;
+        try (Session session = createSessionFactory().openSession()) {
+
+            tr = session.getTransaction();
+            tr.begin();
+
+            session.update(t);
+
+            tr.commit();
+            return t;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            if (tr != null)
+                tr.rollback();
+            throw new HibernateException("Update is failed");
+        }
     }
 
+    public T delete(String hqlFindEntity, String hqlDelEntity, long id){
+        Transaction tr = null;
+        try (Session session = createSessionFactory().openSession()) {
+
+            tr = session.getTransaction();
+            tr.begin();
+
+            T deleteEntity = findById(hqlFindEntity, id);
+
+            Query queryDelHt = session.createQuery(hqlDelEntity);
+            queryDelHt.setParameter("ID", id);
+            queryDelHt.executeUpdate();
+
+            tr.commit();
+
+            return deleteEntity;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            if (tr != null)
+                tr.rollback();
+            throw new HibernateException("Delete is failed");
+        }
+    }
+
+    public T findById(String sql, Long id){
+        try (Session session = createSessionFactory().openSession()) {
+
+            Query query = session.createQuery(sql);
+            query.setParameter("ID", id);
+
+            if (query.uniqueResult() == null)
+                return null;
+            T entity = (T) query.getSingleResult();
+
+            return entity;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            throw new HibernateException("Something went wrong");
+        }
+    }
+
+    public SessionFactory createSessionFactory() {
+
+        //singleton pattern
+        if (sessionFactory == null) {
+            sessionFactory = new Configuration().configure().buildSessionFactory();
+        }
+        return sessionFactory;
+    }
     /*public T addEntity(T t) throws Exception {
 
         if (t == null)
@@ -99,52 +179,7 @@ public abstract class GeneralRepository<T> {
         }
         return null;
     }*/
-    public T save(T t) throws Exception {
 
-        Transaction tr = null;
-        try (Session session = createSessionFactory().openSession()) {
-
-            tr = session.getTransaction();
-            tr.begin();
-
-            session.save(t);
-
-            tr.commit();
-            return t;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            if (tr != null)
-                tr.rollback();
-            throw new HibernateException("Save is failed");
-        }
-    }
-    public T findEntityById(String sql, Long id){
-        try (Session session = createSessionFactory().openSession()) {
-
-            Query query = session.createQuery(sql);
-            query.setParameter("ID", id);
-
-            if (query.uniqueResult() == null)
-                return null;
-            T entity = (T) query.getSingleResult();
-
-            return entity;
-
-        } catch (HibernateException e) {
-            System.err.println(e.getMessage());
-            throw new HibernateException("Something went wrong");
-        }
-    }
-
-    public SessionFactory createSessionFactory() {
-
-        //singleton pattern
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
-        return sessionFactory;
-    }
 
    /* public static Long generateId() {
         long generateId;

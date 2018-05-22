@@ -21,15 +21,6 @@ public class Order {
     public Order() {
     }
 
-    public Order(User user, Room room, Date dateFrom, Date dateTo, double moneyPaid) {
-        this.user = user;
-        this.room = room;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
-        this.moneyPaid = moneyPaid;
-    }
-
-
     @Id
     @SequenceGenerator(name = "ORDER_SEQ", sequenceName = "ORDER_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_SEQ")
