@@ -11,7 +11,7 @@ import static hibernate.lesson4.Utils.checkWordOnLetters;
  * Created by user on 23.05.2018.
  */
 public class UserService {
-    private UserRepository userRepository;
+    private UserRepository userRepository = new UserRepository();
 
     public User save(User user) throws Exception {
         validateInputData(user);

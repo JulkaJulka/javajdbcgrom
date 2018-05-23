@@ -16,12 +16,13 @@ import static hibernate.lesson4.Utils.checkWordOnDigts;
  */
 public class UserRepository extends GeneralRepository<User> {
     public static final String FIND_US_BY_ID_US = "FROM User WHERE ID = :ID ";
-    public static final String FIND_US_BY_USNAME = "FROM User WHERE userName := NAME";
+    public static final String FIND_US_BY_USNAME = "FROM User WHERE userName = :NAME";
     public static final String DELETE_US_BY_ID_US = "DELETE FROM User WHERE ID = :ID";
 
     public User delete(long id) {
         return delete(FIND_US_BY_ID_US, DELETE_US_BY_ID_US, id);
     }
+   // public User delete
 
     public User findById(Long id) {
         return findById(FIND_US_BY_ID_US, id);

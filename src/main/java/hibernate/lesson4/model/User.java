@@ -87,7 +87,7 @@ public class User {
         this.userType = userType;
     }
 
-    public void ListOrders(List<Order> orders) {
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
 
