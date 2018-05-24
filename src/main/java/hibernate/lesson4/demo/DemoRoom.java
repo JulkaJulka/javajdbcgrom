@@ -21,11 +21,11 @@ public class DemoRoom {
         hotel1.setCity("Lviv");
         hotel1.setStreet("Crntal");
        Hotel hotel2 = new Hotel();
-      //  hotel2.setId(123l);
+       hotel2.setId(123l);
         Room room1 = new Room( );
-       // room1.setId(102l);
+        room1.setId(265l);
         room1.setNumberOfGuests(2);
-        room1.setBreakfastIncluded(true);
+        room1.setBreakfastIncluded(false);
         room1.setDateAvailableFrom(new Date());
         room1.setPetsAllowed(false);
         room1.setHotel(hotel2);
@@ -35,7 +35,9 @@ public class DemoRoom {
        // room4.setId(-78l);
        // Filter filter = new Filter(2, 1000d, true, false, dateF, "Ukraine", "Rovno");
        // System.out.println(roomRepository.findEntityById(RoomRepository.FIND_RM_BY_ID_ROOM,102l));
-        System.out.println(roomRepository.save(room1));
+       // System.out.println(roomRepository.save(room1));
+        RoomRepository roomRepository1 = new RoomRepository();
+        System.out.println(roomRepository.findById(267l));
 
     }
 

@@ -34,7 +34,8 @@ public class DemoUser {
        // System.out.println(userService.save(user3));
 
         UserController userController = new UserController();
-        userController.register(user3);
+       // userController.register(user3);
+        System.out.println(userRepository.findById(34l));
 
     }
 }

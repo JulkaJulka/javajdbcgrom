@@ -28,9 +28,9 @@ public class UserService {
         return userRepository.update(user);
     }
 
-    public User delete(Long id) throws Exception {
+    public void delete(Long id) throws Exception {
         userRepository.validateUser(id);
-        return userRepository.delete(id);
+        userRepository.delete(id);
     }
 
     public User findById(Long id) throws Exception {

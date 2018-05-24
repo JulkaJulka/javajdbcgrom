@@ -1,8 +1,13 @@
 package hibernate.lesson4.demo;
 
+import hibernate.lesson4.controller.HotelController;
 import hibernate.lesson4.model.Hotel;
 import hibernate.lesson4.model.Room;
+import hibernate.lesson4.model.User;
+import hibernate.lesson4.model.UserType;
 import hibernate.lesson4.repository.HotelRepository;
+import hibernate.lesson4.service.HotelService;
+
 import static hibernate.lesson4.repository.HotelRepository.FIND_HT_BY_ID_HOTEL;
 
 import java.util.HashSet;
@@ -23,9 +28,17 @@ public class DemoHotel {
         hotel1.setCity("Lviv");
         hotel1.setStreet("Crntal");
         List rooms = new LinkedList<>();
-
-        hotelRepository.findById(FIND_HT_BY_ID_HOTEL, 123l);
-      // System.out.println(hotelRepository.save(hotel3));
+       // System.out.println(hotelRepository.save(hotel1));
+        System.out.println( hotelRepository.findById(123l));
+       //System.out.println(hotelRepository.findHotelByName("Schac"));
+        User user = new User();
+        user.setUserType(UserType.ADMIN);
+       // System.out.println(hotelRepository.findHotelByCity("Lviv"));
+        HotelService hotelService = new HotelService();
+       // hotelService.deleteHotel(263l,user);
+        HotelController hotelController = new HotelController();
+       // System.out.println(hotelController.addHotel(hotel1,user));
+        System.out.println(hotelRepository.findById(265l));
 
     }
 }
