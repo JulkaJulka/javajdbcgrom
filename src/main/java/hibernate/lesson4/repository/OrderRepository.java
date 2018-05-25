@@ -68,9 +68,11 @@ public class OrderRepository extends GeneralRepository<Order> {
             Query<Order> query = session.createQuery(FIND_OR_BY_USRM_OR);
             query.setParameter("idUs", userId);
             query.setParameter("idRm", roomId);
+            if (query.uniqueResult() != null){
             Order order = query.getSingleResult();
 
-            delete(order.getId());
+
+            delete(order.getId());}
 
         } catch (HibernateException e) {
             System.err.println(e.getMessage());
