@@ -85,8 +85,6 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", user=" + user +
-                ", room=" + room +
                 ", dateFrom=" + dateFrom +
                 ", dateTo=" + dateTo +
                 ", moneyPaid=" + moneyPaid +
@@ -102,8 +100,6 @@ public class Order {
 
         if (id != order.id) return false;
         if (Double.compare(order.moneyPaid, moneyPaid) != 0) return false;
-        if (user != null ? !user.equals(order.user) : order.user != null) return false;
-        if (room != null ? !room.equals(order.room) : order.room != null) return false;
         if (dateFrom != null ? !dateFrom.equals(order.dateFrom) : order.dateFrom != null) return false;
         return dateTo != null ? dateTo.equals(order.dateTo) : order.dateTo == null;
 
@@ -114,8 +110,6 @@ public class Order {
         int result;
         long temp;
         result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (room != null ? room.hashCode() : 0);
         result = 31 * result + (dateFrom != null ? dateFrom.hashCode() : 0);
         result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
         temp = Double.doubleToLongBits(moneyPaid);

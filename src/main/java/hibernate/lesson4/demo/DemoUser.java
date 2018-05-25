@@ -26,7 +26,7 @@ public class DemoUser {
 
         user3.setUserType(UserType.USER);
        //System.out.println(userRepository.findById(221l));
-       // System.out.println(userRepository.findUserByUserName(user3));
+        System.out.println(userRepository.findUserByUserName(user3));
 
       // userRepository.delete(221l);
 
@@ -35,7 +35,7 @@ public class DemoUser {
 
         UserController userController = new UserController();
        // userController.register(user3);
-        System.out.println(userRepository.findById(34l));
+        //System.out.println(userRepository.findById(34l));
 
     }
 }

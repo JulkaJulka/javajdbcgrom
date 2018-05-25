@@ -17,17 +17,18 @@ public class HotelService {
     private HotelRepository hotelRepository = new HotelRepository();
 
     public List<Hotel> findHotelByName(String name) throws Exception {
-        checkWordOnLetters(name);
+        checkHotelName(name);
         return hotelRepository.findHotelByName(name);
     }
 
     public List<Hotel> findHotelByCity(String city) throws Exception {
-        checkWordOnLetters(city);
+        checkCityOfHotel(city);
         return hotelRepository.findHotelByCity(city);
     }
 
     public Hotel addHotel(Hotel hotel, User user) throws Exception {
         validateHotel(hotel);
+        checkHotelName(hotel.getName());
         if (user.getUserType() != UserType.ADMIN)
             throw new Exception("You have not rights to add hotel");
         return hotelRepository.save(hotel);

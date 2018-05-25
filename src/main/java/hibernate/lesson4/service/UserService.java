@@ -1,5 +1,6 @@
 package hibernate.lesson4.service;
 
+import hibernate.lesson4.exception.BadRequestException;
 import hibernate.lesson4.model.User;
 import hibernate.lesson4.repository.UserRepository;
 import org.hibernate.HibernateException;
@@ -29,12 +30,12 @@ public class UserService {
     }
 
     public void delete(Long id) throws Exception {
-        userRepository.validateUser(id);
-        userRepository.delete(id);
+        validateUser(id);
+        delete(id);
     }
 
     public User findById(Long id) throws Exception {
-        userRepository.validateUser(id);
+        validateUser(id);
         return userRepository.findById(id);
     }
 
@@ -51,5 +52,15 @@ public class UserService {
             throw new Exception("Country " + user.getCountry() + " must have only letters");
         }
         return true;
+    }
+
+    public  void validateUser(Long id)throws Exception{
+        if(id <= 0)
+            throw new BadRequestException("You enter wrong userId. Please, try again");
+    }
+
+    public  void validateUser(User user)throws Exception{
+        if(user == null)
+            throw new BadRequestException("User doesn't exist in DB");
     }
 }

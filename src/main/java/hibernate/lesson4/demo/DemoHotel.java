@@ -21,24 +21,26 @@ import java.util.Set;
 public class DemoHotel {
     public static void main(String[] args) throws Exception {
         HotelRepository hotelRepository = new HotelRepository();
-
         Hotel hotel1 = new Hotel();
-        hotel1.setName("Schac");
+      //  hotel1.setId(261l);
+        hotel1.setName(":::<<>");
         hotel1.setCountry("Country");
         hotel1.setCity("Lviv");
         hotel1.setStreet("Crntal");
+       // System.out.println(hotel1.getRooms());
         List rooms = new LinkedList<>();
-       // System.out.println(hotelRepository.save(hotel1));
-        System.out.println( hotelRepository.findById(123l));
-       //System.out.println(hotelRepository.findHotelByName("Schac"));
+
+       // System.out.println( hotelRepository.findById(123l));
+       System.out.println(hotelRepository.findHotelByName("fffffffffffffffffff"));
         User user = new User();
         user.setUserType(UserType.ADMIN);
-       // System.out.println(hotelRepository.findHotelByCity("Lviv"));
+      // System.out.println(hotelRepository.findHotelByCity("Lviv"));
         HotelService hotelService = new HotelService();
        // hotelService.deleteHotel(263l,user);
         HotelController hotelController = new HotelController();
-       // System.out.println(hotelController.addHotel(hotel1,user));
-        System.out.println(hotelRepository.findById(265l));
+      // System.out.println(hotelController.addHotel(hotel1,user));
+       // System.out.println(hotelRepository.findById(265l));
+        System.out.println();
 
     }
 }

@@ -45,10 +45,5 @@ public class UserRepository extends GeneralRepository<User> {
         }
     }
 
-    public  void validateUser(Long id)throws Exception{
-        if(id <= 0)
-            throw new BadRequestException("You enter wrong userId. Please, try again");
-        if(findById(id) == null)
-            throw new Exception("User with id " + id + " does not exist in DB User");
-    }
+
 }

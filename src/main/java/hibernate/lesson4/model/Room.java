@@ -110,7 +110,6 @@ public class Room {
                 ", breakfastIncluded=" + breakfastIncluded +
                 ", petsAllowed=" + petsAllowed +
                 ", dateAvailableFrom=" + dateAvailableFrom +
-                ", hotel=" + hotel +
                 '}';
     }
 
@@ -126,9 +125,7 @@ public class Room {
         if (Double.compare(room.price, price) != 0) return false;
         if (breakfastIncluded != room.breakfastIncluded) return false;
         if (petsAllowed != room.petsAllowed) return false;
-        if (dateAvailableFrom != null ? !dateAvailableFrom.equals(room.dateAvailableFrom) : room.dateAvailableFrom != null)
-            return false;
-        return hotel != null ? hotel.equals(room.hotel) : room.hotel == null;
+        return dateAvailableFrom != null ? dateAvailableFrom.equals(room.dateAvailableFrom) : room.dateAvailableFrom == null;
 
     }
 
@@ -143,7 +140,6 @@ public class Room {
         result = 31 * result + (breakfastIncluded ? 1 : 0);
         result = 31 * result + (petsAllowed ? 1 : 0);
         result = 31 * result + (dateAvailableFrom != null ? dateAvailableFrom.hashCode() : 0);
-        result = 31 * result + (hotel != null ? hotel.hashCode() : 0);
         return result;
     }
 }

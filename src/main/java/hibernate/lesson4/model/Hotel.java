@@ -81,6 +81,18 @@ private long id;
         this.street = street;
     }
 
+
+    @Override
+    public String toString() {
+        return "Hotel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,8 +104,7 @@ private long id;
         if (name != null ? !name.equals(hotel.name) : hotel.name != null) return false;
         if (country != null ? !country.equals(hotel.country) : hotel.country != null) return false;
         if (city != null ? !city.equals(hotel.city) : hotel.city != null) return false;
-        if (street != null ? !street.equals(hotel.street) : hotel.street != null) return false;
-        return rooms != null ? rooms.equals(hotel.rooms) : hotel.rooms == null;
+        return street != null ? street.equals(hotel.street) : hotel.street == null;
 
     }
 
@@ -104,21 +115,6 @@ private long id;
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (rooms != null ? rooms.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", rooms=" + rooms +
-                '}';
-    }
-
-
 }

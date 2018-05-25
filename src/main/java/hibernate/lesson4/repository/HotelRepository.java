@@ -53,8 +53,6 @@ public class HotelRepository extends GeneralRepository<Hotel> {
             Query query = session.createQuery(FIND_HTS_BY_CITY_HOTEL);
             query.setParameter("CITY", name);
 
-             if (query.list() == null)
-                return null;
             List<Hotel> findHtls =  query.list();
 
             return findHtls;

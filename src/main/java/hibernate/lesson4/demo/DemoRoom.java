@@ -37,7 +37,9 @@ public class DemoRoom {
        // System.out.println(roomRepository.findEntityById(RoomRepository.FIND_RM_BY_ID_ROOM,102l));
        // System.out.println(roomRepository.save(room1));
         RoomRepository roomRepository1 = new RoomRepository();
-        System.out.println(roomRepository.findById(267l));
+       // System.out.println(roomRepository.findById(267l));
+        Filter filter = new Filter(2,899,false,false,null,null,null);
+        System.out.println(roomRepository.findRooms(filter));
 
     }
 

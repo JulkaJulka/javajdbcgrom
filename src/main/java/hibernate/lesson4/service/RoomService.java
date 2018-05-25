@@ -16,6 +16,10 @@ public class RoomService {
 
     private RoomRepository roomRepository = new RoomRepository();
 
+    public List<Room> findRooms(Filter filter) throws Exception {
+        return roomRepository.findRooms(filter);
+    }
+
     public Room addRoom(Room room, User user) throws Exception {
         validateRoom(room);
         if (user.getUserType() != UserType.ADMIN)
@@ -41,25 +45,4 @@ public class RoomService {
             throw new Exception("Room with id " + id + " does not exist in DB Room");
     }
 
-    public boolean conformityFilter(Room room, Filter filter) {
-        if (filter == null)
-            return false;
-        if (filter.getNumberOfGuests() != 0 && room.getNumberOfGuests() != filter.getNumberOfGuests())
-            return false;
-        if (filter.getPrice() != 0 && room.getPrice() != filter.getPrice())
-            return false;
-        if (filter.isBreakfastIncluded() != room.getBreakfastIncluded())
-            return false;
-        if (filter.isPetsAllowed() != room.getPetsAllowed())
-            return false;
-        if (filter.getDateAvailableFrom() != null && filter.getDateAvailableFrom().compareTo(room.getDateAvailableFrom()) < 0)
-            return false;
-        if (room.getHotel() == null || room.getHotel().getCountry() == null || room.getHotel().getCity() == null)
-            return false;
-        if (filter.getCountry() != null && (room.getHotel() != null && !filter.getCountry().equals(room.getHotel().getCountry())))
-            return false;
-        if (filter.getCity() != null && (room.getHotel() != null && !filter.getCity().equals(room.getHotel().getCity())))
-            return false;
-        return true;
-    }
 }
