@@ -31,7 +31,9 @@ public class DemoHotel {
         List rooms = new LinkedList<>();
 
        // System.out.println( hotelRepository.findById(123l));
-       System.out.println(hotelRepository.findHotelByName("fffffffffffffffffff"));
+      // System.out.println(hotelRepository.findHotelByName("fffffffffffffffffff"));
+      //  Hotel hotel3 = hotelRepository.findById(123l);
+        //System.out.println(hotel3.getRooms());
         User user = new User();
         user.setUserType(UserType.ADMIN);
       // System.out.println(hotelRepository.findHotelByCity("Lviv"));
@@ -39,8 +41,17 @@ public class DemoHotel {
        // hotelService.deleteHotel(263l,user);
         HotelController hotelController = new HotelController();
       // System.out.println(hotelController.addHotel(hotel1,user));
-       // System.out.println(hotelRepository.findById(265l));
+       // System.out.println(hotelRepository.findById(261l).getRooms().toString());
         System.out.println();
+        System.out.println();
+       // List<Hotel> hotels = hotelRepository.findHotelByName("Rixos");
+       // for(Hotel ht : hotels){
+       //     System.out.println(ht.getRooms().toString());
+       // }
+
+       // System.out.println(hotelRepository.findHotelByStrDescrip("COUNTRY","Country"));
+        System.out.println(hotelRepository.findHotelByName("Schac"));
+        System.out.println(hotelRepository.findHotelByCity("Kyiv"));
 
     }
 }

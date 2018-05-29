@@ -1,21 +1,17 @@
 package hibernate.lesson4.repository;
 
-import hibernate.lesson4.exception.BadRequestException;
 import hibernate.lesson4.model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Field;
 import java.util.*;
-
-import static hibernate.lesson4.Utils.*;
 
 
 public class RoomRepository extends GeneralRepository<Room> {
     public static final String FIND_RM_BY_ID_ROOM = "FROM Room WHERE ID = :ID ";
     public static final String DELETE_RM_BY_ID_ROOM = "DELETE FROM Room WHERE ID = :ID ";
-    public static final String SELECT_ALL_RMS = "FROM Room";
 
     public Room findById(Long id) {
         return findById(FIND_RM_BY_ID_ROOM, id);
@@ -25,22 +21,14 @@ public class RoomRepository extends GeneralRepository<Room> {
         delete(DELETE_RM_BY_ID_ROOM, id);
     }
 
-    public List<Room> findRooms(Filter filter) {
+    public List<Room> findRooms(Filter f) {
         try (Session session = createSessionFactory().openSession()) {
 
-            Query query = session.createQuery(SELECT_ALL_RMS);
-            List<Room> rms = query.list();
-            List<Room> findRms = new LinkedList<>();
-            if(rms.size() == 0)
-                return rms;
+            Query query = session.createQuery(hqlFindRmsByFilter(f));
 
-            for (Room rm : rms){
-                if(conformityFilter(rm, filter)){
-                    findRms.add(rm);
-                }
-            }
+            List<Room> roomList = query.list();
 
-            return findRms;
+            return roomList;
 
         } catch (HibernateException e) {
             System.err.println(e.getMessage());
@@ -49,27 +37,30 @@ public class RoomRepository extends GeneralRepository<Room> {
         }
     }
 
-    public boolean conformityFilter(Room room, Filter filter) {
-        if (filter == null)
-            return false;
-        if (filter.getNumberOfGuests() != 0 && room.getNumberOfGuests() != filter.getNumberOfGuests())
-            return false;
-        if (filter.getPrice() != 0 && room.getPrice() != filter.getPrice())
-            return false;
-        if (filter.isBreakfastIncluded() != room.getBreakfastIncluded())
-            return false;
-        if (filter.isPetsAllowed() != room.getPetsAllowed())
-            return false;
-        if (filter.getDateAvailableFrom() != null && filter.getDateAvailableFrom().compareTo(room.getDateAvailableFrom()) < 0)
-            return false;
-        if (room.getHotel() == null || room.getHotel().getCountry() == null || room.getHotel().getCity() == null)
-            return false;
-        if (filter.getCountry() != null && (room.getHotel() != null && !filter.getCountry().equals(room.getHotel().getCountry())))
-            return false;
-        if (filter.getCity() != null && (room.getHotel() != null && !filter.getCity().equals(room.getHotel().getCity())))
-            return false;
-        return true;
+    public String hqlFindRmsByFilter(Filter f){
+        String findFilter = "FROM Room WHERE ";
+        if (f.getNumberOfGuests() != 0) {
+            findFilter = findFilter + "numberOfGuests = " + f.getNumberOfGuests() + ",";
+        }
+        if (f.getPrice() != 0) {
+            findFilter = findFilter + " price = " + f.getPrice() + ",";
+        }
+        if (f.getDateAvailableFrom() != null) {
+            findFilter = findFilter + "dateAvailableFrom  = " + f.getDateAvailableFrom() + ",";
+        }
+        if (f.getCountry() != null) {
+            findFilter = findFilter + "hotel.country = '" + f.getCountry() + "',";
+
+        }
+        if (f.getCity() != null) {
+            findFilter = findFilter + "hotel.city = '" + f.getCity() + "',";
+        }
+
+        findFilter = findFilter + "breakfastIncluded = " + f.getBreakfastIncluded() +
+                " AND petsAllowed = " + f.getPetsAllowed();
+
+        String sqlRmThrowFilter = findFilter.replace(",", " AND ");
+
+        return sqlRmThrowFilter;
     }
-
-
 }

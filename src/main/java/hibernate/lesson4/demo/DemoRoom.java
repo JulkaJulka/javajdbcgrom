@@ -3,7 +3,6 @@ package hibernate.lesson4.demo;
 import hibernate.lesson4.model.*;
 import hibernate.lesson4.repository.RoomRepository;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -38,7 +37,9 @@ public class DemoRoom {
        // System.out.println(roomRepository.save(room1));
         RoomRepository roomRepository1 = new RoomRepository();
        // System.out.println(roomRepository.findById(267l));
-        Filter filter = new Filter(2,899,false,false,null,null,null);
+        Filter filter = new Filter(2,0d,false,false,null,null,"Kyiv");
+      //  System.out.println(roomRepository.findRooms(filter));
+       // System.out.println(roomRepository.findRooms2(filter));
         System.out.println(roomRepository.findRooms(filter));
 
     }

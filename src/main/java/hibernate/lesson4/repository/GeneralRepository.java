@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -39,6 +40,7 @@ public abstract class GeneralRepository<T> {
             throw new HibernateException("Save is failed");
         }
     }
+
     public T update(T t) throws HibernateException {
 
         Transaction tr = null;
@@ -60,7 +62,7 @@ public abstract class GeneralRepository<T> {
         }
     }
 
-    public void delete(String hqlDelEntity, long id){
+    public void delete(String hqlDelEntity, long id) {
         Transaction tr = null;
         try (Session session = createSessionFactory().openSession()) {
 
@@ -81,7 +83,7 @@ public abstract class GeneralRepository<T> {
         }
     }
 
-    public T findById(String sql, Long id){
+    public T findById(String sql, Long id) {
         try (Session session = createSessionFactory().openSession()) {
 
             Query query = session.createQuery(sql);
@@ -92,6 +94,24 @@ public abstract class GeneralRepository<T> {
             T entity = (T) query.getSingleResult();
 
             return entity;
+
+        } catch (HibernateException e) {
+            System.err.println(e.getMessage());
+            throw new HibernateException("Something went wrong");
+        }
+    }
+
+    public List<T> findHotelByStrDescrip(String searchParametr, String name) {
+
+        try (Session session = createSessionFactory().openSession()) {
+            String hql = "FROM Hotel WHERE " + searchParametr + " = :NAME";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("NAME", name);
+
+            List<T> findHtls = query.list();
+
+            return findHtls;
 
         } catch (HibernateException e) {
             System.err.println(e.getMessage());
