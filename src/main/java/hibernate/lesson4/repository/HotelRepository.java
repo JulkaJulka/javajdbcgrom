@@ -17,8 +17,6 @@ import static hibernate.lesson4.Utils.checkWordOnLetters;
 public class HotelRepository extends GeneralRepository<Hotel> {
 
     public static final String FIND_HT_BY_ID_HOTEL = "FROM Hotel WHERE ID = :ID ";
-    public static final String FIND_HTS_BY_NAME_HOTEL = "FROM Hotel WHERE NAME = :NAME ";
-    public static final String FIND_HTS_BY_CITY_HOTEL = "FROM Hotel WHERE CITY = :CITY ";
     public static final String DELETE_HT_BY_ID_HOTEL = "DELETE FROM Hotel WHERE ID = :ID";
 
 
