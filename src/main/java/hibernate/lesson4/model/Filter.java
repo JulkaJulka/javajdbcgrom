@@ -126,7 +126,7 @@ public class Filter {
                     nameParam = "hotel." + field.getName();
                 }
                 if(listObj.indexOf(field) == sizeList - 1) {
-                    System.out.println(field.getClass());
+
                     str +=  nameParam + " = " + '\'' + fieldValue + '\'';
                 } else {
                     str += nameParam + " = " + '\'' + fieldValue + '\'' + " AND ";

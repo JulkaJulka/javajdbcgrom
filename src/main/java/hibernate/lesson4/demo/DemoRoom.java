@@ -51,7 +51,7 @@ public class DemoRoom {
       //  System.out.println(roomRepository.findRooms(filter));
        // System.out.println(roomRepository.findRooms2(filter));
         //System.out.println(roomRepository.findRooms(filter));
-       System.out.println(filter1.sqlSelect());
+      // System.out.println(filter1.sqlSelect());
        // System.out.println(filter1.toString());
         System.out.println(roomRepository.findRooms(filter1));
        // System.out.println(filter1.toString2());
