@@ -1,17 +1,17 @@
 package hibernate.lesson4.model;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * Created by user on 27.05.2018.
  */
 public class Filter {
 
-    int numberOfGuests;
-    private double price;
+    private Integer numberOfGuests;
+    private Double price;
     private boolean breakfastIncluded;
     private boolean petsAllowed;
     private Date dateAvailableFrom;
@@ -22,31 +22,21 @@ public class Filter {
     public Filter() {
     }
 
-    public Filter(int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed,
-                  Date dateAvailableFrom, String country, String city) {
-        this.numberOfGuests = numberOfGuests;
-        this.price = price;
-        this.breakfastIncluded = breakfastIncluded;
-        this.petsAllowed = petsAllowed;
-        this.dateAvailableFrom = dateAvailableFrom;
-        this.country = country;
-        this.city = city;
-    }
 
 
-    public int getNumberOfGuests() {
+    public Integer getNumberOfGuests() {
         return numberOfGuests;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public boolean getBreakfastIncluded() {
+    public Boolean getBreakfastIncluded() {
         return breakfastIncluded;
     }
 
-    public boolean getPetsAllowed() {
+    public Boolean getPetsAllowed() {
         return petsAllowed;
     }
 
@@ -62,19 +52,19 @@ public class Filter {
         return city;
     }
 
-    public void setNumberOfGuests(int numberOfGuests) {
+    public void setNumberOfGuests(Integer numberOfGuests) {
         this.numberOfGuests = numberOfGuests;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public void setBreakfastIncluded(boolean breakfastIncluded) {
+    public void setBreakfastIncluded(Boolean breakfastIncluded) {
         this.breakfastIncluded = breakfastIncluded;
     }
 
-    public void setPetsAllowed(boolean petsAllowed) {
+    public void setPetsAllowed(Boolean petsAllowed) {
         this.petsAllowed = petsAllowed;
     }
 
@@ -90,18 +80,6 @@ public class Filter {
         this.city = city;
     }
 
-    /*@Override
-    public String toString() {
-        return "Filter{" +
-                "numberOfGuests=" + numberOfGuests +
-                ", price=" + price +
-                ", breakfastIncluded=" + breakfastIncluded +
-                ", petsAllowed=" + petsAllowed +
-                ", dateAvailableFrom=" + dateAvailableFrom +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }*/
 
 
     @Override
@@ -119,36 +97,45 @@ public class Filter {
     }
 
     public String sqlSelect() {
-int count = 0;
+        int count = 0;
         Field[] fields = getClass().getDeclaredFields();
         String str = "FROM Room WHERE ";
+        List listObj = new ArrayList();
         for (Field fl : fields) {
             try {
+
                 Object fieldValue = fl.get(this);
                 if (fieldValue != null) {
-                    count++;
-                    str += fl.getName() + " = " + '\'' + fieldValue + '\'' + " AND ";
+                    listObj.add(fl);
                 }
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-
         }
-        System.out.println(count);
+        int sizeList = listObj.size();
+        if(listObj.size() == 0)
+            return "SELECT * FROM Room";
+        for (int i = 0; i < listObj.size(); i ++) {
+            try {
+
+                Field field = (Field) listObj.get(i);
+                Object fieldValue = field.get(this);
+                String nameParam = field.getName();
+                if(field.getName()== "city" || field.getName() == "country"){
+                    nameParam = "hotel." + field.getName();
+                }
+                if(listObj.indexOf(field) == sizeList - 1) {
+                    System.out.println(field.getClass());
+                    str +=  nameParam + " = " + '\'' + fieldValue + '\'';
+                } else {
+                    str += nameParam + " = " + '\'' + fieldValue + '\'' + " AND ";
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         return str;
     }
 
-
-    public String toString2() {
-        return
-                "FROM Room WHERE " +
-                        "numberOfGuests=" + numberOfGuests + " AND " +
-                        "price=" + price + " AND " +
-                        "breakfastIncluded=" + breakfastIncluded + " AND " +
-                        "petsAllowed=" + petsAllowed + " AND " +
-                        "dateAvailableFrom=" + dateAvailableFrom + " AND " +
-                        "hotel.country =\'" + country + '\'' + " AND " +
-                        "hotel.city='" + city + '\'';
-    }
 }

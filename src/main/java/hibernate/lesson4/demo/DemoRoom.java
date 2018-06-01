@@ -32,20 +32,30 @@ public class DemoRoom {
         //Room room3 = new Room( 2, 1800d, true, false, new Date(), hotel2);
 
        // room4.setId(-78l);
+
+
        // Filter filter = new Filter(2, 1000d, true, false, dateF, "Ukraine", "Rovno");
        // System.out.println(roomRepository.findEntityById(RoomRepository.FIND_RM_BY_ID_ROOM,102l));
        // System.out.println(roomRepository.save(room1));
         RoomRepository roomRepository1 = new RoomRepository();
        // System.out.println(roomRepository.findById(267l));
-        Filter filter = new Filter(2,0d,false,false,null,null,"Kyiv");
+       // Filter filter = new Filter(0,0d,false,false,null,null,"Kyiv");
+        Filter filter1 = new Filter();
+        filter1.setPrice(899d);
+        filter1.setCity("Lviv");
+        //filter1.setPrice(0d);
+       // filter1.setBreakfastIncluded(true);
        // System.out.println(filter.sqlSelect());
        // System.out.println(filter.toString2());
        // filter.toString();
       //  System.out.println(roomRepository.findRooms(filter));
        // System.out.println(roomRepository.findRooms2(filter));
         //System.out.println(roomRepository.findRooms(filter));
-        System.out.println(filter.sqlSelect());
-
+       System.out.println(filter1.sqlSelect());
+       // System.out.println(filter1.toString());
+        System.out.println(roomRepository.findRooms(filter1));
+       // System.out.println(filter1.toString2());
+      //  System.out.println(filter.toString2());
     }
 
 }

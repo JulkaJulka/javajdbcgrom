@@ -23,7 +23,7 @@ public class RoomRepository extends GeneralRepository<Room> {
     public List<Room> findRooms(Filter f) {
         try (Session session = createSessionFactory().openSession()) {
 
-            Query query = session.createQuery(hqlFindRmsByFilter(f));
+            Query query = session.createQuery(f.sqlSelect());
 
             List<Room> roomList = query.list();
 
@@ -36,7 +36,7 @@ public class RoomRepository extends GeneralRepository<Room> {
         }
     }
 
-    public String hqlFindRmsByFilter(Filter f){
+    /*public String hqlFindRmsByFilter(Filter f){
         String findFilter = "FROM Room WHERE ";
         if (f.getNumberOfGuests() != 0) {
             findFilter = findFilter + "numberOfGuests = " + f.getNumberOfGuests() + ",";
@@ -61,5 +61,5 @@ public class RoomRepository extends GeneralRepository<Room> {
         String sqlRmThrowFilter = findFilter.replace(",", " AND ");
 
         return sqlRmThrowFilter;
-    }
+    }*/
 }
