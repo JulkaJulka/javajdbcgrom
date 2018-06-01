@@ -38,9 +38,13 @@ public class DemoRoom {
         RoomRepository roomRepository1 = new RoomRepository();
        // System.out.println(roomRepository.findById(267l));
         Filter filter = new Filter(2,0d,false,false,null,null,"Kyiv");
+       // System.out.println(filter.sqlSelect());
+       // System.out.println(filter.toString2());
+       // filter.toString();
       //  System.out.println(roomRepository.findRooms(filter));
        // System.out.println(roomRepository.findRooms2(filter));
-        System.out.println(roomRepository.findRooms(filter));
+        //System.out.println(roomRepository.findRooms(filter));
+        System.out.println(filter.sqlSelect());
 
     }
 
