@@ -5,8 +5,7 @@ import hibernate.lesson4.repository.GeneralRepository;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 /**
@@ -100,6 +99,7 @@ public class Room {
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
+
 
     @Override
     public String toString() {

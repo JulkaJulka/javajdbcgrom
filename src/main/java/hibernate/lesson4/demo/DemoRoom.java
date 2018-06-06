@@ -42,7 +42,7 @@ public class DemoRoom {
        // Filter filter = new Filter(0,0d,false,false,null,null,"Kyiv");
         Filter filter1 = new Filter();
         filter1.setPrice(899d);
-        filter1.setCity("Lviv");
+        filter1.setCity("jklhbb");
         //filter1.setPrice(0d);
        // filter1.setBreakfastIncluded(true);
        // System.out.println(filter.sqlSelect());
@@ -51,7 +51,7 @@ public class DemoRoom {
       //  System.out.println(roomRepository.findRooms(filter));
        // System.out.println(roomRepository.findRooms2(filter));
         //System.out.println(roomRepository.findRooms(filter));
-      // System.out.println(filter1.sqlSelect());
+       //System.out.println(filter1.sqlSelect());
        // System.out.println(filter1.toString());
         System.out.println(roomRepository.findRooms(filter1));
        // System.out.println(filter1.toString2());

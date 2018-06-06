@@ -1,10 +1,11 @@
 package hibernate.lesson4.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hibernate.lesson4.model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
+import javax.persistence.criteria.*;
 import java.util.*;
 
 
@@ -23,11 +24,32 @@ public class RoomRepository extends GeneralRepository<Room> {
     public List<Room> findRooms(Filter f) {
         try (Session session = createSessionFactory().openSession()) {
 
-            Query query = session.createQuery(f.sqlSelect());
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> filterParams = objectMapper.convertValue(f, Map.class);
 
-            List<Room> roomList = query.list();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Room> roomCriteria = criteriaBuilder.createQuery(Room.class);
 
-            return roomList;
+            Root<Room> roomRoot = roomCriteria.from(Room.class);
+
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            for (String param : filterParams.keySet()) {
+                if (filterParams.get(param) != null) {
+
+                    if (param.equals("country") || param.equals("city")) {
+                        predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(
+                                roomRoot.get("hotel").get(param), filterParams.get(param)));
+                    } else {
+                        predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(
+                                roomRoot.get(param), filterParams.get(param)));
+                    }
+                }
+            }
+
+            roomCriteria.select(roomRoot).where(predicate);
+
+            return session.createQuery(roomCriteria).getResultList();
 
         } catch (HibernateException e) {
             System.err.println(e.getMessage());

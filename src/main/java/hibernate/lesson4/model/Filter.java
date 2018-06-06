@@ -22,8 +22,6 @@ public class Filter {
     public Filter() {
     }
 
-
-
     public Integer getNumberOfGuests() {
         return numberOfGuests;
     }
